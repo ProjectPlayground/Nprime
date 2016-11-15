@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">Nprime</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="logo">Logo</string>
+
+    <string name="homepage_settings">Settings</string>
+    <string name="homepage_logout">Logout</string>
+    <string name="help">Help</string>
+
+    <string name="content_desc_picture">Button to Add an Image to Existing Event</string>
+    <string name="content_desc_clock">Clock to display time for events</string>
+    <string name="content_desc_add_event">Button to Add an Event</string>
+    <string name="content_desc_user_profile_img">User Profile Image</string>
+    <string name="content_desc_chat_send_button">Send Button for Messages typed</string>
+
+    <string name="search">Search</string>
+    <string name="chat">Chat</string>
+    <string name="upcoming_events">Upcoming Events</string>
+
+    <string name="full_name">Full Name</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+
+    <string name="or">OR</string>
+    <string name="email_address">Email Address</string>
+
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="request_permission">This sample needs camera permission.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

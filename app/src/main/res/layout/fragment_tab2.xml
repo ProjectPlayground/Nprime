@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/messages_tab_header"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="4dp"
+                android:background="#383838"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <TextView
+                    android:id="@+id/messages_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Messages"
+                    android:textColor="#E5E5E5"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/event_image"
+                android:layout_width="match_parent"
+                android:layout_height="144dp"
+                android:layout_below="@id/messages_tab_header"
+                android:layout_marginTop="4dp"
+                android:background="#6d6d70"
+                android:elevation="4dp" />
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <include
+        android:id="@+id/message_area_layout"
+        layout="@layout/send_message_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:gravity="bottom" />
+
+</LinearLayout>

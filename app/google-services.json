@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1970779199",
+    "firebase_url": "https://nprime-3f89f.firebaseio.com",
+    "project_id": "nprime-3f89f",
+    "storage_bucket": "nprime-3f89f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1970779199:android:215d92a407679472",
+        "android_client_info": {
+          "package_name": "com.chornge.nprime"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1970779199-c7d4kbek2pb0nsmolta3471l1f70jpcv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chornge.nprime",
+            "certificate_hash": "EDBEB53BE87A00E2D903B6296DB58B662EDF666D"
+          }
+        },
+        {
+          "client_id": "1970779199-tdrnd9kknmqgm0ppk23a8j6skhegtglo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXKNJ3WVPKZI733E4eIMtvwviKpVa06qs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1970779199-tdrnd9kknmqgm0ppk23a8j6skhegtglo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

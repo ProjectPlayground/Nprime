@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/events_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp">
+
+            <LinearLayout
+                android:id="@+id/events_tab_header"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="#383838"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/events_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Events"
+                    android:textColor="#E5E5E5"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <ViewSwitcher
+                android:id="@+id/top_layer_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/events_tab_header">
+
+                <LinearLayout
+                    android:id="@+id/clock_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:paddingBottom="8dp">
+
+                    <ImageButton
+                        android:id="@+id/pictureButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="2"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/content_desc_picture"
+                        android:src="@drawable/ic_camera_black_24dp" />
+
+                    <ImageView
+                        android:id="@+id/clockButton"
+                        android:layout_width="270dp"
+                        android:layout_height="270dp"
+                        android:layout_weight="5"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/content_desc_clock"
+                        android:src="@drawable/clock" />
+
+                    <ImageButton
+                        android:id="@+id/plusButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="2"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/content_desc_add_event"
+                        android:src="@drawable/ic_add_circle_outline_black_24dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/camera_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:id="@+id/camera_preview"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:id="@+id/button_capture"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Take Picture" />
+
+                </LinearLayout>
+
+            </ViewSwitcher>
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@id/top_layer_layout"
+                android:layout_marginTop="4dp"
+                android:background="#645c6a"
+                android:paddingBottom="3dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/card_view1"
+                        android:layout_width="240dp"
+                        android:layout_height="176dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginTop="2dp"
+                        android:animateLayoutChanges="false"
+                        android:hapticFeedbackEnabled="true"
+                        android:isScrollContainer="true"
+                        android:nestedScrollingEnabled="false"
+                        card_view:cardCornerRadius="8dp">
+
+                        <TextView
+                            android:id="@+id/info_text1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:hapticFeedbackEnabled="true"
+                            android:isScrollContainer="true"
+                            android:text="Basketball"
+                            android:textColor="#006699"
+                            android:textStyle="bold" />
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/card_view2"
+                        android:layout_width="240dp"
+                        android:layout_height="176dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginTop="2dp"
+                        card_view:cardCornerRadius="8dp">
+
+                        <TextView
+                            android:id="@+id/info_text2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:hapticFeedbackEnabled="true"
+                            android:isScrollContainer="true"
+                            android:text="Wedding"
+                            android:textColor="#006699"
+                            android:textStyle="bold" />
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/card_view3"
+                        android:layout_width="240dp"
+                        android:layout_height="176dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginTop="2dp"
+                        card_view:cardCornerRadius="8dp">
+
+                        <TextView
+                            android:id="@+id/info_text3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:hapticFeedbackEnabled="true"
+                            android:isScrollContainer="true"
+                            android:text="Baby Shower"
+                            android:textColor="#006699"
+                            android:textStyle="bold" />
+
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

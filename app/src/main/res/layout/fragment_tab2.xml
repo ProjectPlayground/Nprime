@@ -17,10 +17,8 @@
                 android:id="@+id/messages_tab_header"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginTop="4dp"
                 android:background="#383838"
-                android:orientation="horizontal"
-                android:padding="4dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/messages_text_view"

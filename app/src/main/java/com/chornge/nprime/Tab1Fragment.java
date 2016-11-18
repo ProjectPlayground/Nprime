@@ -263,11 +263,6 @@ public class Tab1Fragment extends Fragment implements OnMapReadyCallback, View.O
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
     }

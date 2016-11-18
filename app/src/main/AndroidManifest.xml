@@ -27,12 +27,10 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".WelcomeActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".SignInActivity" />
-        <activity android:name=".TabLayoutActivity" />
+        <activity android:name=".UserLayoutActivity" />
         <activity android:name=".CreateEventActivity" />
 
-        <activity android:name=".Splash">
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

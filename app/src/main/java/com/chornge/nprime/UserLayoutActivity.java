@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class TabLayoutActivity extends AppCompatActivity {
+public class UserLayoutActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
 
@@ -27,7 +27,7 @@ public class TabLayoutActivity extends AppCompatActivity {
         final PagerAdapter mPagerAdapter;
 
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager = (ViewPager) findViewById(R.id.view_pager);
 
         mTabLayout.addTab(mTabLayout.newTab().setIcon(R.drawable.profile_icon));
         mTabLayout.addTab(mTabLayout.newTab().setIcon(R.drawable.chat_icon));

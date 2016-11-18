@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:scrollbars="none"
-    tools:context="com.chornge.nprime.SignUpActivity">
+    tools:context="com.chornge.nprime.SignUpFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

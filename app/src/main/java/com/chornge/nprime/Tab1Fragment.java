@@ -1,6 +1,7 @@
 package com.chornge.nprime;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -8,6 +9,7 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -38,13 +41,9 @@ public class Tab1Fragment extends Fragment implements OnMapReadyCallback, View.O
     public static final int RESULT_GALLERY = 0;
     private static final String KEY_NAME = "key_name";
     private static final int SELECT_PICTURE = 1;
-    private static int LOCATION_REQUEST_CODE = 101;
     boolean isTabLoaded = false;
     ImageButton userProfilePhoto;
     FirebaseAuth firebaseAuth;
-    private String selectedImagePath;
-    private GoogleMap mMap;
-    private String FullNameFromSignUp;
 
     private DatePickerDialog datePickerDialog;
     private ImageButton calendar_event_button;
@@ -66,7 +65,7 @@ public class Tab1Fragment extends Fragment implements OnMapReadyCallback, View.O
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            FullNameFromSignUp = getArguments().getString(KEY_NAME);
+            String fullNameFromSignUp = getArguments().getString(KEY_NAME);
         }
 
         setRetainInstance(true);
@@ -84,8 +83,8 @@ public class Tab1Fragment extends Fragment implements OnMapReadyCallback, View.O
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[],
-                                           int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
         switch (requestCode) {
             case 101: {
                 if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
@@ -102,6 +101,9 @@ public class Tab1Fragment extends Fragment implements OnMapReadyCallback, View.O
 
         //inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tab1, container, false);
+
+        ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
+                .hideSoftInputFromWindow(view.getWindowToken(), 0);
 
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -132,6 +134,7 @@ public class Tab1Fragment extends Fragment implements OnMapReadyCallback, View.O
 
         }
 
+        int LOCATION_REQUEST_CODE = 101;
         requestPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_REQUEST_CODE);
 
         SupportMapFragment mapFragment = SupportMapFragment.newInstance();
@@ -139,6 +142,7 @@ public class Tab1Fragment extends Fragment implements OnMapReadyCallback, View.O
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.mapContainer, mapFragment).commit();
+
         return view;
     }
 
@@ -159,7 +163,7 @@ public class Tab1Fragment extends Fragment implements OnMapReadyCallback, View.O
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        GoogleMap mMap = googleMap;
         UiSettings mapSettings;
 
         //if (mMap != null) {
@@ -195,7 +199,7 @@ public class Tab1Fragment extends Fragment implements OnMapReadyCallback, View.O
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
                 Uri selectedImageUri = data.getData();
-                selectedImagePath = getPath(selectedImageUri);
+                String selectedImagePath = getPath(selectedImageUri);
                 userProfilePhoto.setImageIcon(Icon.createWithContentUri(selectedImageUri));
                 userProfilePhoto.setImageURI(selectedImageUri);
             }

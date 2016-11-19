@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -44,6 +45,7 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
     boolean isTabLoaded = false;
     ImageButton userProfilePhoto;
     FirebaseAuth firebaseAuth;
+    TextView location_text;
 
     private DatePickerDialog datePickerDialog;
     private ImageButton calendar_event_button;
@@ -110,38 +112,37 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
 
         if (user != null) {
             //String userID = firebaseAuth.getCurrentUser().getUid();
-            userProfilePhoto = (ImageButton) view.findViewById(R.id.user_profile_photo);
-            userProfilePhoto.setOnClickListener(this);
 
             // Name, email address, and profile photo Url
             //String fullName = user.getDisplayName();
 
             TextView userProfileName = (TextView) view.findViewById(R.id.user_profile_name);
             //userProfileName.setText(FullNameFromSignUp);
-
-            calendar_event_button = (ImageButton) view.findViewById(R.id.calendar_event_button);
-            calendar_event_button.setOnClickListener(this);
-
-            Calendar calendar = Calendar.getInstance();
-            datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view, int year, int month, int day) {
-                    Calendar newCalendar = Calendar.getInstance();
-                    newCalendar.set(year, month, day);
-                }
-
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-
         }
+
+        location_text = (TextView) view.findViewById(R.id.location_text);
+        location_text.setOnClickListener(this);
+
+        userProfilePhoto = (ImageButton) view.findViewById(R.id.user_profile_photo);
+        userProfilePhoto.setOnClickListener(this);
+
+        calendar_event_button = (ImageButton) view.findViewById(R.id.calendar_event_button);
+        calendar_event_button.setOnClickListener(this);
+
+        Calendar calendar = Calendar.getInstance();
+        datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                Calendar newCalendar = Calendar.getInstance();
+                newCalendar.set(year, month, day);
+            }
+
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 
         int LOCATION_REQUEST_CODE = 101;
         requestPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_REQUEST_CODE);
 
-        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-        mapFragment.getMapAsync(this);
-
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.mapContainer, mapFragment).commit();
+        //fragmentTransaction.replace(R.id.mapContainer, mapFragment).commit();
 
         return view;
     }
@@ -245,6 +246,19 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent,
                     "Select Picture"), SELECT_PICTURE);
+        }
+
+        if (view == location_text) {
+            MapDialogFragment mapDialogFragment = new MapDialogFragment();
+            //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentManager fragmentManager = getChildFragmentManager();
+            mapDialogFragment.show(fragmentManager, mapDialogFragment.getTag());
+
+            SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+            mapFragment.getMapAsync(this);
+
+            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.map_dialog_fragment_container, mapFragment).commit();
         }
     }
 

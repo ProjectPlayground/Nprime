@@ -1,0 +1,9 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/map_dialog_fragment_container"
+    android:layout_width="360dp"
+    android:layout_height="360dp"
+    android:layout_gravity="center"
+    tools:context="com.chornge.nprime.MapDialogFragment">
+
+</FrameLayout>

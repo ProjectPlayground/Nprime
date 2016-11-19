@@ -36,7 +36,7 @@ import java.util.Calendar;
 
 import static android.app.Activity.RESULT_OK;
 
-public class Tab1Fragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
+public class UserProfileFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
 
     public static final int RESULT_GALLERY = 0;
     private static final String KEY_NAME = "key_name";
@@ -49,12 +49,12 @@ public class Tab1Fragment extends Fragment implements OnMapReadyCallback, View.O
     private ImageButton calendar_event_button;
 
     //mandatory
-    public Tab1Fragment() {
+    public UserProfileFragment() {
 
     }
 
-    public static Tab1Fragment newInstance(String userFullName) {
-        Tab1Fragment fragment = new Tab1Fragment();
+    public static UserProfileFragment newInstance(String userFullName) {
+        UserProfileFragment fragment = new UserProfileFragment();
         Bundle args = new Bundle();
         args.putString(KEY_NAME, userFullName);
         fragment.setArguments(args);
@@ -100,7 +100,7 @@ public class Tab1Fragment extends Fragment implements OnMapReadyCallback, View.O
                              Bundle savedInstanceState) {
 
         //inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_tab1, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
         ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
                 .hideSoftInputFromWindow(view.getWindowToken(), 0);

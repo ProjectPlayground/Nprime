@@ -17,17 +17,17 @@ public class PagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                Tab1Fragment tab1 = new Tab1Fragment();
-                return tab1;
+                //tab 1
+                return new UserProfileFragment();
             case 1:
-                Tab2Fragment tab2 = new Tab2Fragment();
-                return tab2;
+                //tab 2
+                return new MessagesFragment();
             case 2:
-                Tab3Fragment tab3 = new Tab3Fragment();
-                return tab3;
+                //tab 3
+                return new ExploreFragment();
             case 3:
-                Tab4Fragment tab4 = new Tab4Fragment();
-                return tab4;
+                //tab 4
+                return new EventsFragment();
             default:
                 return null;
         }

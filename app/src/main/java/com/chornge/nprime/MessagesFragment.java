@@ -3,21 +3,26 @@ package com.chornge.nprime;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class Tab3Fragment extends Fragment {
+public class MessagesFragment extends Fragment implements View.OnClickListener {
+
+    ImageButton sendMessage;
+    EditText messageInputEntry;
+    String capturedMessage;
+    TextView messages_text_view;
 
     boolean isTabLoaded = false;
-    TextView explore_text_view;
-    private StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     //mandatory
-    public Tab3Fragment() {
+    public MessagesFragment() {
 
     }
 
@@ -31,13 +36,19 @@ public class Tab3Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ReadRss readRss = new ReadRss(getContext());
-        readRss.execute();
-        View view = inflater.inflate(R.layout.fragment_tab3, container, false);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_messages, container, false);
 
         Typeface robotoBold = Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Bold.ttf");
-        explore_text_view = (TextView) view.findViewById(R.id.explore_text_view);
-        explore_text_view.setTypeface(robotoBold);
+
+        messages_text_view = (TextView) view.findViewById(R.id.messages_text_view);
+        messages_text_view.setTypeface(robotoBold);
+        messageInputEntry = (EditText) view.findViewById(R.id.message_input_area);
+
+        capturedMessage = messageInputEntry.getText().toString();
+
+        sendMessage = (ImageButton) view.findViewById(R.id.send_button);
+        sendMessage.setOnClickListener(this);
 
         return view;
     }
@@ -47,7 +58,7 @@ public class Tab3Fragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
 
         if (isVisibleToUser && !isTabLoaded) {
-            Log.e("Third Tab Fragment", "loaded");
+            Log.e("Second Tab Fragment", "loaded");
             isTabLoaded = true;
         }
     }
@@ -70,5 +81,12 @@ public class Tab3Fragment extends Fragment {
     @Override
     public void onLowMemory() {
         super.onLowMemory();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == sendMessage) {
+            Toast.makeText(getContext(), capturedMessage + " sent...", Toast.LENGTH_SHORT).show();
+        }
     }
 }

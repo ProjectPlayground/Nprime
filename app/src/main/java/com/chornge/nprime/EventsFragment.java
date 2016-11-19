@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-public class Tab4Fragment extends Fragment implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
+public class EventsFragment extends Fragment implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
 
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
@@ -26,12 +26,12 @@ public class Tab4Fragment extends Fragment implements View.OnClickListener, Frag
     TextView events_text_view;
 
     //mandatory
-    public Tab4Fragment() {
+    public EventsFragment() {
 
     }
 
-    public static Tab4Fragment newInstance() {
-        return new Tab4Fragment();
+    public static EventsFragment newInstance() {
+        return new EventsFragment();
     }
 
     @Override
@@ -45,7 +45,7 @@ public class Tab4Fragment extends Fragment implements View.OnClickListener, Frag
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_tab4, container, false);
+        View view = inflater.inflate(R.layout.fragment_events, container, false);
 
         Typeface robotoBold = Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Bold.ttf");
 

@@ -262,7 +262,6 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-
     @Override
     public void onResume() {
         super.onResume();

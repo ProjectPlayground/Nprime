@@ -69,11 +69,11 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
             String fullNameFromSignUp = getArguments().getString(KEY_NAME);
         }
 
-        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-        mapFragment.getMapAsync(this);
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.mapContainer, mapFragment).commit();
-        setRetainInstance(true);
+//        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+//        mapFragment.getMapAsync(this);
+//        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.mapContainer, mapFragment).commit();
+//        setRetainInstance(true);
     }
 
     protected void requestPermission(String permissionType, int
@@ -145,10 +145,10 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         int LOCATION_REQUEST_CODE = 101;
         requestPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_REQUEST_CODE);
 
-//        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-//        mapFragment.getMapAsync(this);
-//        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.mapContainer, mapFragment).commit();
+        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+        mapFragment.getMapAsync(this);
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.mapContainer, mapFragment).commit();
 
         return view;
     }

@@ -252,7 +252,7 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         }
 
         if (view == location_text) {
-//            MapDialogFragment mapDialogFragment = new MapDialogFragment();
+            MapDialogFragment mapDialogFragment = new MapDialogFragment();
 //            //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 //            FragmentManager fragmentManager = getChildFragmentManager();
 //            mapDialogFragment.show(fragmentManager, mapDialogFragment.getTag());
@@ -261,7 +261,6 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
 //            mapFragment.getMapAsync(this);
 //
 //            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-//            fragmentTransaction.replace(R.id.mapContainer, mapFragment).commit();
 //            //fragmentTransaction.replace(R.id.map_dialog_fragment_container, mapFragment).commit();
         }
     }

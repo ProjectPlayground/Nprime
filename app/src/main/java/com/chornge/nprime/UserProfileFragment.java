@@ -12,7 +12,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -142,7 +141,10 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         int LOCATION_REQUEST_CODE = 101;
         requestPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_REQUEST_CODE);
 
-        //fragmentTransaction.replace(R.id.mapContainer, mapFragment).commit();
+        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+        mapFragment.getMapAsync(this);
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.mapContainer, mapFragment).commit();
 
         return view;
     }
@@ -174,6 +176,7 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
             return;
         }
         mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mapSettings = mMap.getUiSettings();
         mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
         mapSettings.setScrollGesturesEnabled(false);
@@ -249,16 +252,17 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         }
 
         if (view == location_text) {
-            MapDialogFragment mapDialogFragment = new MapDialogFragment();
-            //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            FragmentManager fragmentManager = getChildFragmentManager();
-            mapDialogFragment.show(fragmentManager, mapDialogFragment.getTag());
-
-            SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-            mapFragment.getMapAsync(this);
-
-            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.map_dialog_fragment_container, mapFragment).commit();
+//            MapDialogFragment mapDialogFragment = new MapDialogFragment();
+//            //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//            FragmentManager fragmentManager = getChildFragmentManager();
+//            mapDialogFragment.show(fragmentManager, mapDialogFragment.getTag());
+//
+//            SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+//            mapFragment.getMapAsync(this);
+//
+//            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+//            fragmentTransaction.replace(R.id.mapContainer, mapFragment).commit();
+//            //fragmentTransaction.replace(R.id.map_dialog_fragment_container, mapFragment).commit();
         }
     }
 

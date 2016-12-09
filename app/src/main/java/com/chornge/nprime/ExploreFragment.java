@@ -39,6 +39,9 @@ public class ExploreFragment extends Fragment {
         explore_text_view = (TextView) view.findViewById(R.id.explore_text_view);
         explore_text_view.setTypeface(robotoBold);
 
+        String Restaurant = "restaurant";
+        String url;
+
         return view;
     }
 

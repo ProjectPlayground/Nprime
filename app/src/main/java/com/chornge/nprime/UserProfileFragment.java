@@ -36,7 +36,7 @@ import java.util.Calendar;
 
 import static android.app.Activity.RESULT_OK;
 
-public class UserProfileFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
+public class UserProfileFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener, Runnable {
 
     public static final int RESULT_GALLERY = 0;
     private static final String KEY_NAME = "key_name";
@@ -69,11 +69,11 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
             String fullNameFromSignUp = getArguments().getString(KEY_NAME);
         }
 
-//        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-//        mapFragment.getMapAsync(this);
-//        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.mapContainer, mapFragment).commit();
-//        setRetainInstance(true);
+        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+        mapFragment.getMapAsync(this);
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.mapContainer, mapFragment).commit();
+        setRetainInstance(true);
     }
 
     protected void requestPermission(String permissionType, int
@@ -295,5 +295,10 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onLowMemory() {
         super.onLowMemory();
+    }
+
+    @Override
+    public void run() {
+        int i = 0;
     }
 }

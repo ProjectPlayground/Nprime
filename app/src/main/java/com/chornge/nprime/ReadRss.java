@@ -18,15 +18,13 @@ import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-public class ReadRss extends AsyncTask<Void, Void, Void> {
+class ReadRss extends AsyncTask<Void, Void, Void> {
 
-    private Context context;
     private ProgressDialog progressDialog;
     private String webAddressForRssFeed = "http://namchouston.org/feed";
     private URL url;
 
-    public ReadRss(Context context) {
-        this.context = context;
+    ReadRss(Context context) {
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Loading...");
     }

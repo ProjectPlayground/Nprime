@@ -3,12 +3,13 @@ package com.chornge.nprime;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.SearchView;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 public class ExploreFragment extends Fragment {
@@ -17,7 +18,7 @@ public class ExploreFragment extends Fragment {
     TextView explore_text_view;
     SearchView searchView;
     CharSequence query;
-    private StaggeredGridLayoutManager staggeredGridLayoutManager;
+    StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     //mandatory
     public ExploreFragment() {
@@ -36,17 +37,21 @@ public class ExploreFragment extends Fragment {
 
         ReadRss readRss = new ReadRss(getContext());
         readRss.execute();
+
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
 
         Typeface robotoBold = Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Bold.ttf");
         explore_text_view = (TextView) view.findViewById(R.id.explore_text_view);
         searchView = (SearchView) view.findViewById(R.id.search_view);
         query = searchView.getQuery();
-        searchView.setQueryHint("Search View");
+        searchView.setQueryHint("Search Here");
         explore_text_view.setTypeface(robotoBold);
 
-        String Restaurant = "restaurant";
-        String url;
+        SearchFragment searchFragment = new SearchFragment();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.scroll_view_for_searched_data, searchFragment, searchFragment.getTag())
+                .commit();
 
         return view;
     }

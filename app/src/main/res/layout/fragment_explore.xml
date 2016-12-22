@@ -4,32 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <LinearLayout
+        android:id="@+id/explore_tab_header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#383838"
+        android:orientation="vertical"
+        android:padding="4dp">
 
-        <LinearLayout
-            android:id="@+id/explore_tab_header"
+        <TextView
+            android:id="@+id/explore_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#383838"
-            android:orientation="vertical"
-            android:padding="4dp">
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Explore"
+            android:textColor="#E5E5E5"
+            android:textSize="28sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/explore_text_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="Explore"
-                android:textColor="#E5E5E5"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+    </LinearLayout>
 
-            <!-- include search fragent here -->
-
-        </LinearLayout>
+    <ScrollView
+        android:id="@+id/scroll_view_for_searched_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="102dp"
+        android:layout_marginTop="42dp">
 
     </ScrollView>
 

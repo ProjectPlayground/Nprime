@@ -2,7 +2,7 @@
 
 <resources>
     <color name="colorPrimary">#b8c1b9</color>
-    <color name="colorPrimaryDark">#B4B3B3</color>
+    <color name="colorPrimaryDark">#030303</color>
     <color name="colorAccent">#4b90d8</color>
     <color name="textColorPrimary">#030303</color>
 
@@ -11,8 +11,9 @@
     <color name="buttonBackground">#000000</color>
     <color name="textColor">#B4B3B3</color>
 
-    <color name="tabBackground">#E5E5E5</color>
-    <color name="tabIndicatorColor">#539378</color>
+    <!-- <color name="tabBackground">#E5E5E5</color> -->
+    <color name="tabBackground">#FED62F</color>
+    <color name="tabIndicatorColor">#080808</color>
     <color name="tabTextColor">#539378</color>
 
     <!--<color name="tabSelectedTextColor">#006699"</color>-->

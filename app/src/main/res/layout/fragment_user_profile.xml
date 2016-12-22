@@ -118,7 +118,6 @@
                     android:id="@+id/profile_event_gallery"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/profile_image"
                     android:gravity="center"
                     android:horizontalSpacing="4dp"
                     android:numColumns="auto_fit"

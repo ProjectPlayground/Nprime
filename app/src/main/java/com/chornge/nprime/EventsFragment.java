@@ -1,9 +1,11 @@
 package com.chornge.nprime;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v13.app.FragmentCompat;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ public class EventsFragment extends Fragment implements View.OnClickListener, Fr
 
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
+    private static final int REQUEST_READ_PERMISSION = 100;
     boolean isTabLoaded = false;
     ImageView clock_button;
     ImageButton plus;
@@ -38,6 +41,11 @@ public class EventsFragment extends Fragment implements View.OnClickListener, Fr
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        if (ActivityCompat.checkSelfPermission(getContext(),
+                android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{android.Manifest.permission.CAMERA}, REQUEST_READ_PERMISSION);
+        }
     }
 
     @Override
@@ -55,6 +63,7 @@ public class EventsFragment extends Fragment implements View.OnClickListener, Fr
         clock_button = (ImageView) view.findViewById(R.id.clockButton);
         plus = (ImageButton) view.findViewById(R.id.plusButton);
         cameraButton = (ImageButton) view.findViewById(R.id.pictureButton);
+
         viewSwitcher = (ViewSwitcher) view.findViewById(R.id.top_layer_layout);
 
         plus.setOnClickListener(this);

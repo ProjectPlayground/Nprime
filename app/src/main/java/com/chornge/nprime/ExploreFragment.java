@@ -3,6 +3,7 @@ package com.chornge.nprime;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ public class ExploreFragment extends Fragment {
 
     boolean isTabLoaded = false;
     TextView explore_text_view;
+    SearchView searchView;
+    CharSequence query;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     //mandatory
@@ -37,6 +40,9 @@ public class ExploreFragment extends Fragment {
 
         Typeface robotoBold = Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Bold.ttf");
         explore_text_view = (TextView) view.findViewById(R.id.explore_text_view);
+        searchView = (SearchView) view.findViewById(R.id.search_view);
+        query = searchView.getQuery();
+        searchView.setQueryHint("Search View");
         explore_text_view.setTypeface(robotoBold);
 
         String Restaurant = "restaurant";

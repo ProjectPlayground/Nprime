@@ -50,7 +50,7 @@ public class ExploreFragment extends Fragment {
         SearchFragment searchFragment = new SearchFragment();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.view_for_searched_data, searchFragment, searchFragment.getTag())
+                .replace(R.id.searched_data_container, searchFragment, searchFragment.getTag())
                 .commit();
 
         return view;

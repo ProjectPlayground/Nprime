@@ -27,6 +27,8 @@
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
+            <!-- include search fragent here -->
+
         </LinearLayout>
 
     </ScrollView>
@@ -38,6 +40,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/activity_tab_view_height"
         android:iconifiedByDefault="false"
+        android:padding="2dp"
         android:queryHint="Search Here">
 
     </SearchView>

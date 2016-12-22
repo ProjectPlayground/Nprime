@@ -25,6 +25,8 @@
                 android:layout_height="176dp"
                 android:background="@drawable/background_splash">
 
+                <!-- put a second background_splash2 with 60% opacity-->
+
                 <TextView
                     android:id="@+id/user_profile_name"
                     android:layout_width="match_parent"
@@ -116,7 +118,7 @@
                     android:id="@+id/profile_event_gallery"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/background_splash"
+                    android:background="@drawable/profile_image"
                     android:gravity="center"
                     android:horizontalSpacing="4dp"
                     android:numColumns="auto_fit"
@@ -130,7 +132,7 @@
             <LinearLayout
                 android:id="@+id/mapContainer"
                 android:layout_width="match_parent"
-                android:layout_height="104dp"
+                android:layout_height="152dp"
                 android:layout_marginTop="8dp"
                 android:background="#030303"
                 android:orientation="horizontal" />

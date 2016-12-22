@@ -13,7 +13,7 @@
 
     <!-- <color name="tabBackground">#E5E5E5</color> -->
     <color name="tabBackground">#FED62F</color>
-    <color name="tabIndicatorColor">#080808</color>
+    <color name="tabIndicatorColor">#393737</color>
     <color name="tabTextColor">#539378</color>
 
     <!--<color name="tabSelectedTextColor">#006699"</color>-->

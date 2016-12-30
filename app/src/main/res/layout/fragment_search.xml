@@ -10,8 +10,8 @@
         android:layout_height="wrap_content"
         android:background="#2fe475"
         android:gravity="center"
-        android:text="@string/hello_blank_fragment"
+        android:text="@string/test_fragment"
         android:textColor="#030303"
-        android:textSize="96sp" />
+        android:textSize="94sp" />
 
 </ScrollView>

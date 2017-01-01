@@ -2,7 +2,12 @@ package com.chornge.nprime;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +15,7 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
@@ -18,6 +24,7 @@ import java.util.Locale;
 
 public class CreateEventActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int SELECT_PICTURE = 1;
     private FloatingActionButton fab;
     private DatePickerDialog datePickerDialogFrom;
     private DatePickerDialog datePickerDialogTo;
@@ -29,9 +36,9 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
 
     private EditText editTextFromDate;
     private EditText editTextToDate;
-
     private EditText editTextStartTime;
     private EditText editTextEndTime;
+    private ImageButton create_event_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +55,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
         editTextToDate = (EditText) findViewById(R.id.edit_text_to_date);
         editTextStartTime = (EditText) findViewById(R.id.edit_text_start_time);
         editTextEndTime = (EditText) findViewById(R.id.edit_text_end_time);
+        create_event_image = (ImageButton) findViewById(R.id.create_event_image);
 
         editTextFromDate.setInputType(InputType.TYPE_NULL);
         //editTextFromDate.setText(dateFormatter.format(newCal.getTime()));
@@ -137,8 +145,13 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
 
         }, newCal.get(Calendar.HOUR_OF_DAY), newCal.get(Calendar.MINUTE), true);
 
-        fab.setOnClickListener(this);
+        setOnClickListeners();
 
+    }
+
+    private void setOnClickListeners() {
+        create_event_image.setOnClickListener(this);
+        fab.setOnClickListener(this);
     }
 
     @Override
@@ -147,5 +160,51 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
 //            Calendar calendar = Calendar.getInstance();
             Snackbar.make(view, "Event Created", Snackbar.LENGTH_SHORT).show();
         }
+
+        if (view == create_event_image) {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent,
+                    "Select Picture"), SELECT_PICTURE);
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
+                Uri selectedImageUri = data.getData();
+                String selectedImagePath = getPath(selectedImageUri);
+                create_event_image.setImageIcon(Icon.createWithContentUri(selectedImageUri));
+                create_event_image.setImageURI(selectedImageUri);
+            }
+        }
+    }
+
+    public String getPath(Uri uri) {
+//        // try to retrieve the image from the media store first
+//        // this will only work for images selected from gallery
+
+//        String[] projection = {MediaStore.Images.Media.DATA};
+//        Cursor cursor = getContext().getContentResolver().query(uri, projection, null, null, null);
+//        if (cursor != null) {
+//            int column_index = cursor
+//                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//            cursor.moveToFirst();
+////            cursor.close();
+//            return cursor.getString(column_index);
+//        }
+//        // this is our fallback here
+//        return uri.getPath();
+
+        String res = null;
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri, proj, null, null, null);
+        if (cursor.moveToFirst()) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            res = cursor.getString(column_index);
+        }
+        cursor.close();
+        return res;
     }
 }

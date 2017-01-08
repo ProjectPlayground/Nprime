@@ -1,8 +1,13 @@
 package com.chornge.nprime;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.hardware.Camera;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.ActivityCompat;
@@ -16,12 +21,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-public class EventsFragment extends Fragment implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
+public class EventsFragment extends Fragment implements View.OnClickListener,
+        FragmentCompat.OnRequestPermissionsResultCallback {
 
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
     private static final int REQUEST_READ_PERMISSION = 100;
     boolean isTabLoaded = false;
+
+    CameraManager cameraManager;
+
     ImageView clock_button;
     ImageButton plus;
     ImageButton cameraButton;
@@ -41,18 +50,12 @@ public class EventsFragment extends Fragment implements View.OnClickListener, Fr
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        if (ActivityCompat.checkSelfPermission(getContext(),
-                android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{android.Manifest.permission.CAMERA}, REQUEST_READ_PERMISSION);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_events, container, false);
 
         Typeface robotoBold = Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Bold.ttf");
@@ -106,23 +109,73 @@ public class EventsFragment extends Fragment implements View.OnClickListener, Fr
     @Override
     public void onClick(View view) {
         if (view == cameraButton) {
-            //request permission
+            if (requestCameraPermission()) {
+                int apiLevelOnPhoneRunningApp = Build.VERSION.SDK_INT;
+
+                if (apiLevelOnPhoneRunningApp >= 21) {
+                    callSupportedAPI();
+                }
+
+                if (apiLevelOnPhoneRunningApp < 21) {
+                    callDeprecatedAPI();
+                }
+            }
         }
 
         if (view == plus) {
-//            Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
-//            intent.setData(CalendarContract.Events.CONTENT_URI);
-//            //intent.setType("vnd.android.cursor.item/event");
-//            startActivity(intent);
             Intent intent = new Intent(getActivity(), CreateEventActivity.class);
             startActivity(intent);
-
-            //Snackbar.make(view, "Event Added", Snackbar.LENGTH_SHORT).show();
-//            Fragment createEventFragment = new CreateEventFragment();
-//            FragmentTransaction ft = getFragmentManager().beginTransaction();
-//            ft.replace(R.id.containerLayout, createEventFragment);
-//            ft.addToBackStack(null);
-//            ft.commit();
         }
+    }
+
+    private boolean requestCameraPermission() {
+        boolean flag = false;
+        if (ActivityCompat.checkSelfPermission(getContext(),
+                android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{android.Manifest.permission.CAMERA}, REQUEST_READ_PERMISSION);
+            flag = true;
+        }
+
+        return flag;
+    }
+
+    /**
+     * Supported api for accessing camera. For devices running lollipop or a greater api build.
+     */
+    private void callSupportedAPI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cameraManager = (CameraManager) getContext().getSystemService(Context.CAMERA_SERVICE);
+            String[] cameraListIDs;
+            try {
+                cameraListIDs = cameraManager.getCameraIdList();
+                for (String cameraListID : cameraListIDs) {
+                    Log.e("cameraid", cameraListID);
+                }
+            } catch (CameraAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Deprecated api for accessing camera. For devices running a lower api build than lollipop.
+     */
+    private Camera callDeprecatedAPI() {
+        Camera mCamera = null;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            if (checkIfDeviceHasCamera(getContext())) {
+                try {
+                    mCamera = Camera.open();
+                } catch (Exception e) {
+                    //Camera not available.
+                }
+            }
+        }
+        return mCamera;
+    }
+
+    private boolean checkIfDeviceHasCamera(Context context) {
+        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
     }
 }

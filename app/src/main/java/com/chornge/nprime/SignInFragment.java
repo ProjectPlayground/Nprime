@@ -26,6 +26,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class SignInFragment extends Fragment implements View.OnClickListener {
 
+    private static int numberOfFailedLogins = 0;
+
     Button sign_in_button;
     TextView forgot_password;
     TextView user_login_text;
@@ -33,15 +35,12 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     EditText edit_text_password_login;
     TextInputLayout email_address_login;
     TextInputLayout password_login;
-
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
-
 
     public SignInFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,6 +105,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(getActivity().getApplicationContext(), "Invalid Email", Toast.LENGTH_SHORT).show();
             return;
         }
+
         if (TextUtils.isEmpty(password)) {
             Toast.makeText(getActivity().getApplicationContext(), "Password must be 6 letters or more", Toast.LENGTH_SHORT).show();
             return;
@@ -122,7 +122,21 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                         if (task.isSuccessful()) {
                             startActivity(new Intent(getActivity().getApplication(), UserLayoutActivity.class));
                         } else {
-                            Toast.makeText(getActivity().getApplicationContext(), "Incorrect Email or Password", Toast.LENGTH_SHORT).show();
+                            numberOfFailedLogins++;
+
+                            if (numberOfFailedLogins % 4 == 0) {
+                                Snackbar.make(getActivity().findViewById(R.id.user_login_container),
+                                        "If you forgot your password, Click on Forgot Password...",
+                                        Snackbar.LENGTH_LONG).show();
+                            } else if (numberOfFailedLogins % 7 == 0) {
+                                Snackbar.make(getActivity().findViewById(R.id.user_login_container),
+                                        "You have failed " + numberOfFailedLogins + " times"
+                                                + "\n A password reset link has been sent to your email",
+                                        Snackbar.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getActivity().getApplicationContext(), "Incorrect Email or Password", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                         progressDialog.dismiss();
                     }

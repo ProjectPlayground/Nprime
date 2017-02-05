@@ -39,11 +39,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
 
-
     public SignUpFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,7 +94,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if (view == sign_up_button) {
-            registerUser();
+            sign_up_user();
         }
 
         if (view == already_a_user) {
@@ -108,7 +106,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void registerUser() {
+    public void sign_up_user() {
         String fullName = edit_text_full_name_sign_up.getText().toString();
         String email = edit_text_email_sign_up.getText().toString().trim();
         String password = edit_text_password_sign_up.getText().toString().trim();

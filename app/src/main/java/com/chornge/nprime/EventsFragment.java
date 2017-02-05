@@ -113,7 +113,8 @@ public class EventsFragment extends Fragment implements View.OnClickListener,
                 int apiLevelOnPhoneRunningApp = Build.VERSION.SDK_INT;
 
                 if (apiLevelOnPhoneRunningApp >= 21) {
-                    callSupportedAPI();
+                    //callSupportedAPI();
+                    callTestAPI();
                 }
 
                 if (apiLevelOnPhoneRunningApp < 21) {
@@ -126,6 +127,18 @@ public class EventsFragment extends Fragment implements View.OnClickListener,
             Intent intent = new Intent(getActivity(), CreateEventActivity.class);
             startActivity(intent);
         }
+    }
+
+    private Camera callTestAPI() {
+        Camera mCamera = null;
+        if (checkIfDeviceHasCamera(getContext())) {
+            try {
+                mCamera = Camera.open();
+            } catch (Exception e) {
+                //Camera not available.
+            }
+        }
+        return mCamera;
     }
 
     private boolean requestCameraPermission() {
@@ -172,6 +185,7 @@ public class EventsFragment extends Fragment implements View.OnClickListener,
                 }
             }
         }
+
         return mCamera;
     }
 

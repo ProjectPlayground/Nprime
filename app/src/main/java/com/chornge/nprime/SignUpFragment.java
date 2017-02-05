@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chornge.nprime.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -107,8 +108,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     }
 
     public void sign_up_user() {
-        String fullName = edit_text_full_name_sign_up.getText().toString();
-        String email = edit_text_email_sign_up.getText().toString().trim();
+        final String fullName = edit_text_full_name_sign_up.getText().toString();
+        final String email = edit_text_email_sign_up.getText().toString().trim();
         String password = edit_text_password_sign_up.getText().toString().trim();
 
         if (TextUtils.isEmpty(fullName)) {
@@ -135,6 +136,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressDialog.dismiss();
                         if (task.isSuccessful()) {
+                            User user = new User(firebaseAuth.getCurrentUser().getUid(), fullName, email);
                             startActivity(new Intent(getActivity().getApplication(), UserLayoutActivity.class));
                         } else {
                             Toast.makeText(getActivity().getApplicationContext(), "Registration Failed", Toast.LENGTH_SHORT).show();

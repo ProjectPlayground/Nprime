@@ -12,18 +12,18 @@ public class User {
     protected ListAdapter listAdapter;
     private List<User> everyoneUserIsFollowing;
     private List<User> everyoneFollowingUser;
-    private int userID;
+    private String userID;
     private List<Event> userEvents;
     private ImageButton imageButton;
     private String email;
 
-    public User(int userID, String name, String email) {
+    public User(String userID, String name, String email) {
         this.userID = userID;
         this.name = name;
         this.email = email;
     }
 
-    public int getUserID() {
+    public String getUserID() {
         return userID;
     }
 

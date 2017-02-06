@@ -146,13 +146,11 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
                     private void loginUser() {
                         firebaseAuth.getCurrentUser().getUid();
-                        User u = new User(firebaseAuth.getCurrentUser().getUid(), sign_in_email);
-                        u.getUserID();
-                        u.setName("Test");
-                        u.getEmail();
+                        User user = new User(firebaseAuth.getCurrentUser().getUid(), sign_in_email);
+                        user.setName(firebaseAuth.getCurrentUser().getDisplayName());
 
-                        UserLayoutActivity.newInstance(u);
-                        UserProfileFragment.newInstance(u);
+                        UserLayoutActivity.newInstance(user);
+                        UserProfileFragment.newInstance(user);
                     }
                 });
     }

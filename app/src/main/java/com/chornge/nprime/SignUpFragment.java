@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SignUpFragment extends Fragment implements View.OnClickListener {
 
@@ -38,6 +39,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     TextInputLayout password_sign_up;
 
     private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
     private ProgressDialog progressDialog;
 
     public SignUpFragment() {
@@ -52,8 +54,10 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(getActivity());
-        Typeface robotoRegular = Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Regular.ttf");
-        Typeface robotoBlack = Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Black.ttf");
+        Typeface robotoRegular = Typeface.createFromAsset(getActivity().getAssets(),
+                "font/Roboto-Regular.ttf");
+        Typeface robotoBlack = Typeface.createFromAsset(getActivity().getAssets(),
+                "font/Roboto-Black.ttf");
 
         sign_up_button = (Button) view.findViewById(R.id.sign_up_button);
         sign_up_button.setTypeface(robotoBlack);
@@ -76,8 +80,10 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         edit_text_password_sign_up = (EditText) view.findViewById(R.id.edit_text_password_sign_up);
         edit_text_password_sign_up.setTypeface(robotoRegular);
 
-        final Animation translateFromTop = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.translate_from_top);
-        final Animation translateFromBottom = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.translate_from_bottom);
+        final Animation translateFromTop = AnimationUtils.loadAnimation(
+                getActivity().getApplicationContext(), R.anim.translate_from_top);
+        final Animation translateFromBottom = AnimationUtils.loadAnimation(
+                getActivity().getApplicationContext(), R.anim.translate_from_bottom);
 
         user_registration_text.setAnimation(translateFromTop);
         full_name_sign_up.setAnimation(translateFromTop);
@@ -108,40 +114,55 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     }
 
     public void sign_up_user() {
-        final String fullName = edit_text_full_name_sign_up.getText().toString();
-        final String email = edit_text_email_sign_up.getText().toString().trim();
-        String password = edit_text_password_sign_up.getText().toString().trim();
+        final String sign_up_fullname = edit_text_full_name_sign_up.getText().toString();
+        final String sign_up_email = edit_text_email_sign_up.getText().toString().trim();
+        String sign_up_password = edit_text_password_sign_up.getText().toString().trim();
 
-        if (TextUtils.isEmpty(fullName)) {
-            Toast.makeText(getActivity().getApplicationContext(), "Invalid Name", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(sign_up_fullname)) {
+            Toast.makeText(getActivity().getApplicationContext(),
+                    "Invalid Name", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getActivity().getApplicationContext(), "Invalid Email", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(sign_up_email)) {
+            Toast.makeText(getActivity().getApplicationContext(),
+                    "Invalid Email", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getActivity().getApplicationContext(), "Password must be 6 letters or more", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(sign_up_password)) {
+            Toast.makeText(getActivity().getApplicationContext(),
+                    "Password must be 6 letters or more", Toast.LENGTH_SHORT).show();
             return;
         }
 
         progressDialog.setMessage("Registering User...");
         progressDialog.show();
 
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
+        firebaseAuth.createUserWithEmailAndPassword(sign_up_email, sign_up_password)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressDialog.dismiss();
                         if (task.isSuccessful()) {
-                            User user = new User(firebaseAuth.getCurrentUser().getUid(), fullName, email);
+                            initializeUser();
                             startActivity(new Intent(getActivity().getApplication(), UserLayoutActivity.class));
                         } else {
-                            Toast.makeText(getActivity().getApplicationContext(), "Registration Failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity().getApplicationContext(),
+                                    "Registration Failed", Toast.LENGTH_SHORT).show();
                         }
                         progressDialog.dismiss();
+                    }
+
+                    /**
+                     * Create user object and pass to user profile
+                     */
+                    private void initializeUser() {
+                        User user = new User(firebaseAuth.getCurrentUser().getUid(), sign_up_email);
+                        user.setName(sign_up_fullname);
+                        UserProfileFragment.newInstance(user);
+                        //UserProfileFragment userProfileFragment = UserProfileFragment.newInstance(user);
+                        //userProfileFragment.setUserObject(user);
                     }
                 });
     }

@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chornge.nprime.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -50,8 +51,10 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(getActivity());
-        Typeface robotoRegular = Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Regular.ttf");
-        Typeface robotoBlack = Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Black.ttf");
+        Typeface robotoRegular = Typeface.createFromAsset(getActivity().getAssets(),
+                "font/Roboto-Regular.ttf");
+        Typeface robotoBlack = Typeface.createFromAsset(getActivity().getAssets(),
+                "font/Roboto-Black.ttf");
 
         sign_in_button = (Button) view.findViewById(R.id.sign_in_button);
         sign_in_button.setTypeface(robotoBlack);
@@ -70,8 +73,10 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         edit_text_password_login = (EditText) view.findViewById(R.id.edit_text_password_login);
         edit_text_password_login.setTypeface(robotoRegular);
 
-        final Animation translateFromTop = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.translate_from_top);
-        final Animation translateFromBottom = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.translate_from_bottom);
+        final Animation translateFromTop = AnimationUtils.loadAnimation(
+                getActivity().getApplicationContext(), R.anim.translate_from_top);
+        final Animation translateFromBottom = AnimationUtils.loadAnimation(
+                getActivity().getApplicationContext(), R.anim.translate_from_bottom);
 
         user_login_text.setAnimation(translateFromTop);
         email_address_login.setAnimation(translateFromTop);
@@ -81,7 +86,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
         sign_in_button.setOnClickListener(this);
         forgot_password.setOnClickListener(this);
-
 
         return view;
     }
@@ -93,34 +97,38 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         }
 
         if (view == forgot_password) {
-            Snackbar.make(getActivity().findViewById(R.id.user_login_container), "Password Reset Email Sent", Snackbar.LENGTH_SHORT).show();
+            forgotPassword();
         }
     }
 
     private void signInUser() {
-        String email = edit_text_email_login.getText().toString().trim();
-        String password = edit_text_password_login.getText().toString().trim();
+        final String sign_in_email = edit_text_email_login.getText().toString().trim();
+        String sign_in_password = edit_text_password_login.getText().toString().trim();
 
-        if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getActivity().getApplicationContext(), "Invalid Email", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(sign_in_email)) {
+            Toast.makeText(getActivity().getApplicationContext(), "Invalid Email",
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getActivity().getApplicationContext(), "Password must be 6 letters or more", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(sign_in_password)) {
+            Toast.makeText(getActivity().getApplicationContext(), "Password must be 6 letters or more",
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 
         progressDialog.setMessage("Logging In User...");
         progressDialog.show();
 
-        firebaseAuth.signInWithEmailAndPassword(email, password)
+        firebaseAuth.signInWithEmailAndPassword(sign_in_email, sign_in_password)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressDialog.dismiss();
                         if (task.isSuccessful()) {
-                            startActivity(new Intent(getActivity().getApplication(), UserLayoutActivity.class));
+                            loginUser();
+                            startActivity(new Intent(getActivity().getApplication(),
+                                    UserLayoutActivity.class));
                         } else {
                             numberOfFailedLogins++;
 
@@ -128,19 +136,38 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                                 Snackbar.make(getActivity().findViewById(R.id.user_login_container),
                                         "If you forgot your password, Click on Forgot Password...",
                                         Snackbar.LENGTH_LONG).show();
-                            } else if (numberOfFailedLogins % 7 == 0) {
-                                Snackbar.make(getActivity().findViewById(R.id.user_login_container),
-                                        "You have failed " + numberOfFailedLogins + " times"
-                                                + "\n A password reset link has been sent to your email",
-                                        Snackbar.LENGTH_LONG).show();
                             } else {
-                                Toast.makeText(getActivity().getApplicationContext(), "Incorrect Email or Password", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity().getApplicationContext(),
+                                        "Incorrect Email or Password", Toast.LENGTH_SHORT).show();
                             }
-
                         }
                         progressDialog.dismiss();
                     }
+
+                    private void loginUser() {
+                        firebaseAuth.getCurrentUser().getUid();
+                        User user = new User(firebaseAuth.getCurrentUser().getUid(), sign_in_email);
+                        user.getUserID();
+                        user.setName("Test Name");
+                        user.getEmail();
+
+                        UserProfileFragment.newInstance(user);
+                    }
                 });
+    }
+
+    private void forgotPassword() {
+        String emailForReset = edit_text_email_login.getText().toString().trim();
+
+        if (TextUtils.isEmpty(emailForReset)) {
+            Toast.makeText(getActivity().getApplicationContext(),
+                    "Check that email is not empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        firebaseAuth.sendPasswordResetEmail(emailForReset);
+        Snackbar.make(getActivity().findViewById(R.id.user_login_container),
+                "Password Reset Email Sent to " + emailForReset, Snackbar.LENGTH_LONG).show();
     }
 
     @Override

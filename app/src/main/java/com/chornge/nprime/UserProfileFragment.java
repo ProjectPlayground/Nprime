@@ -24,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chornge.nprime.users.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -46,6 +47,8 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
     FirebaseAuth firebaseAuth;
     TextView location_text;
 
+    User userObject;
+
     private DatePickerDialog datePickerDialog;
     private ImageButton calendar_event_button;
 
@@ -54,20 +57,20 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
 
     }
 
-    public static UserProfileFragment newInstance(String userFullName) {
+    public static UserProfileFragment newInstance(User user) {
         UserProfileFragment fragment = new UserProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(KEY_NAME, userFullName);
-        fragment.setArguments(args);
+//        fragment.setUserObject(user);
+        fragment.userObject = user;
         return fragment;
     }
+
+//    public void setUserObject(User user) {
+//        userObject = user;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            String fullNameFromSignUp = getArguments().getString(KEY_NAME);
-        }
 
         SupportMapFragment mapFragment = SupportMapFragment.newInstance();
         mapFragment.getMapAsync(this);
@@ -114,13 +117,8 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
         if (user != null) {
-            //String userID = firebaseAuth.getCurrentUser().getUid();
-
-            // Name, email address, and profile photo Url
-            //String fullName = user.getDisplayName();
-
             TextView userProfileName = (TextView) view.findViewById(R.id.user_profile_name);
-            //userProfileName.setText(FullNameFromSignUp);
+            //userProfileName.setText(userObject.getName());
         }
 
         location_text = (TextView) view.findViewById(R.id.location_text);
@@ -152,11 +150,6 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
 
         return view;
     }
-
-//    public void setTextView(String textName) {
-//        TextView textView = (TextView) getView().findViewById(R.id.user_profile_name);
-//        textView.setText(textName);
-//    }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {

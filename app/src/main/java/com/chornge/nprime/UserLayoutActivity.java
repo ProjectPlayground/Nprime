@@ -5,11 +5,19 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.chornge.nprime.users.User;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class UserLayoutActivity extends AppCompatActivity {
 
+    private User userObject;
     private FirebaseAuth firebaseAuth;
+
+    public static UserLayoutActivity newInstance(User u) {
+        UserLayoutActivity userLayoutActivity = new UserLayoutActivity();
+        userLayoutActivity.userObject = u;
+        return userLayoutActivity;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

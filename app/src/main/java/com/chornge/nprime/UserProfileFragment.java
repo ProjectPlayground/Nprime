@@ -113,13 +113,14 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
                 .hideSoftInputFromWindow(view.getWindowToken(), 0);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+//        if (firebaseUser != null) {
+//            firebaseUser.getUid();
+//        }
 
-        if (user != null) {
-            TextView userProfileName = (TextView) view.findViewById(R.id.user_profile_name);
-            //userProfileName.setText(user.getDisplayName());
-            userProfileName.setText(userObject.getName());
-        }
+        TextView userProfileName = (TextView) view.findViewById(R.id.user_profile_name);
+        //userProfileName.setText(user.getDisplayName());
+        userProfileName.setText(firebaseUser.getDisplayName());
 
         location_text = (TextView) view.findViewById(R.id.location_text);
         location_text.setOnClickListener(this);

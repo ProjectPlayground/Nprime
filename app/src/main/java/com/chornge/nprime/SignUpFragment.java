@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class SignUpFragment extends Fragment implements View.OnClickListener {
 
@@ -160,9 +161,11 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                     private void initializeUser() {
                         User user = new User(firebaseAuth.getCurrentUser().getUid(), sign_up_email);
                         user.setName(sign_up_fullname);
+
+                        UserProfileChangeRequest.Builder profileUpdateRequest = new UserProfileChangeRequest.Builder();
+                        profileUpdateRequest.setDisplayName(String.valueOf(sign_up_fullname));
+                        UserLayoutActivity.newInstance(user);
                         UserProfileFragment.newInstance(user);
-                        //UserProfileFragment userProfileFragment = UserProfileFragment.newInstance(user);
-                        //userProfileFragment.setUserObject(user);
                     }
                 });
     }

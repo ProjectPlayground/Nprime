@@ -114,9 +114,6 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
 
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-//        if (firebaseUser != null) {
-//            firebaseUser.getUid();
-//        }
 
         TextView userProfileName = (TextView) view.findViewById(R.id.user_profile_name);
         //userProfileName.setText(user.getDisplayName());

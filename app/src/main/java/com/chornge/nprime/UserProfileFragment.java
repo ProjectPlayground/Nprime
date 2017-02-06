@@ -57,16 +57,15 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
 
     }
 
-    public static UserProfileFragment newInstance(User user) {
+    public static UserProfileFragment newInstance(User u) {
         UserProfileFragment fragment = new UserProfileFragment();
-//        fragment.setUserObject(user);
-        fragment.userObject = user;
+        fragment.setUserObject(u);
         return fragment;
     }
 
-//    public void setUserObject(User user) {
-//        userObject = user;
-//    }
+    public void setUserObject(User u) {
+        userObject = u;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -118,7 +117,8 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
 
         if (user != null) {
             TextView userProfileName = (TextView) view.findViewById(R.id.user_profile_name);
-            //userProfileName.setText(userObject.getName());
+            //userProfileName.setText(user.getDisplayName());
+            userProfileName.setText(userObject.getName());
         }
 
         location_text = (TextView) view.findViewById(R.id.location_text);

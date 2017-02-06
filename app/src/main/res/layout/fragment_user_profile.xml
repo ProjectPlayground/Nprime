@@ -35,7 +35,6 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="16dp"
                     android:gravity="center_horizontal"
-                    android:text="First Name - Last Name"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 

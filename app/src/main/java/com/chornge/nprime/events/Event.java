@@ -12,7 +12,7 @@ public class Event implements Attendees {
     private Calendar eventDate;
     private Calendar eventTime;
     private String eventDescription = " ";
-    private List<User> guests;
+    private List<User> guestList;
     private User eventCreator;
     private List<User> admins;
     private boolean isPublicEvent = true;
@@ -91,15 +91,15 @@ public class Event implements Attendees {
 
     @Override
     public void addGuest(User newGuest) {
-        guests.add(newGuest);
+        guestList.add(newGuest);
     }
 
     @Override
     public void removeGuest(User guestToRemove) {
-        guests.remove(guestToRemove);
+        guestList.remove(guestToRemove);
     }
 
     public List<User> getGuests() {
-        return guests;
+        return guestList;
     }
 }

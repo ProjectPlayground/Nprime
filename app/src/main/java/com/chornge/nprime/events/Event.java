@@ -99,7 +99,6 @@ public class Event implements Attendees {
         guests.remove(guestToRemove);
     }
 
-    @Override
     public List<User> getGuests() {
         return guests;
     }

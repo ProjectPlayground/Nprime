@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,7 +32,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.Calendar;
 
@@ -113,11 +114,12 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
                 .hideSoftInputFromWindow(view.getWindowToken(), 0);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
         TextView userProfileName = (TextView) view.findViewById(R.id.user_profile_name);
-        //userProfileName.setText(user.getDisplayName());
-        userProfileName.setText(firebaseUser.getDisplayName());
+        UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
+        builder.build().getDisplayName();
+        userProfileName.setText(builder.build().getDisplayName());
+        userProfileName.setTextColor(Color.MAGENTA);
 
         location_text = (TextView) view.findViewById(R.id.location_text);
         location_text.setOnClickListener(this);

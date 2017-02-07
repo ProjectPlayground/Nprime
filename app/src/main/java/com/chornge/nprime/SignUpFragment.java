@@ -160,12 +160,11 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                      */
                     private void initializeUser() {
                         User user = new User(firebaseAuth.getCurrentUser().getUid(), sign_up_email);
-                        user.setName(sign_up_fullname);
+                        user.setUserName(sign_up_fullname);
 
                         UserProfileChangeRequest.Builder profileUpdateRequest = new UserProfileChangeRequest.Builder();
                         profileUpdateRequest.setDisplayName(String.valueOf(sign_up_fullname));
-                        UserLayoutActivity.newInstance(user);
-                        UserProfileFragment.newInstance(user);
+//                        profileUpdateRequest.build().getDisplayName();
                     }
                 });
     }

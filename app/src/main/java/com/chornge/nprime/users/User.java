@@ -2,55 +2,52 @@ package com.chornge.nprime.users;
 
 import android.widget.ImageButton;
 
+import com.chornge.nprime.events.Event;
+
 import java.util.List;
 
 public class User {
-    protected String name;
+    private String userName;
     private String userID;
-    private ImageButton imageButton;
-    private String email;
+    private ImageButton userPhoto;
+    private String userEmail;
+    private List<User> everyoneUserIsFollowing;
+    private List<User> everyoneFollowingUser;
+    private List<Event> userEventList;
 
-    public User(String userID, String email) {
-        this.name = "";
+    public User(String userID, String userEmail) {
+        this.userName = "";
         this.userID = userID;
-        this.email = email;
+        this.userEmail = userEmail;
     }
 
     public String getUserID() {
         return userID;
     }
 
-    public ImageButton getImageButton() {
-        return imageButton;
+    public ImageButton getUserPhoto() {
+        return userPhoto;
     }
 
-    public void setImageButton(ImageButton imageButton) {
-        this.imageButton = imageButton;
+    public void setUserPhoto(ImageButton newUserPhoto) {
+        this.userPhoto = newUserPhoto;
     }
 
     // ...look into ThreadLocal...
 
-    public String getEmail() {
-        return email;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserEmail(String newUserEmail) {
+        this.userEmail = newUserEmail;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<User> everyoneFollowingUser() {
-        return null;
-    }
-
-    public List<User> everyoneUserIsFollowing() {
-        return null;
+    public void setUserName(String newUserName) {
+        this.userName = newUserName;
     }
 }

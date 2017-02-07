@@ -7,62 +7,100 @@ import com.chornge.nprime.users.User;
 import java.util.Calendar;
 import java.util.List;
 
-public class Event {
-    protected String name;
-    private Calendar date;
-    private Calendar time;
-    private List<User> usersAttending;
-    private boolean isPublicEvent;
+public class Event implements Guests {
+    private String eventName;
+    private Calendar eventDate;
+    private Calendar eventTime;
+    private String eventDescription = " ";
+    private List<User> guests;
+    private User eventCreator;
+    private List<User> admins;
+    private boolean isPublicEvent = true;
     private int eventID;
-    private ImageButton imageButton;
+    private ImageButton eventLogo;
 
-    public Event(int eventID, String name, boolean isPublicEvent) {
+    public Event(int eventID, String eventName, User eventCreator) {
         this.eventID = eventID;
-        this.name = name;
-        this.isPublicEvent = isPublicEvent;
+        this.eventName = eventName;
+        this.eventCreator = eventCreator;
+    }
+
+    public List<User> getAdmins() {
+        return admins;
+    }
+
+    public String getEventCreator() {
+        return eventCreator.getUserName();
+    }
+
+    public void setAdmin(User newAdmin) {
+        admins.add(newAdmin);
     }
 
     public boolean isPublicEvent() {
         return isPublicEvent;
     }
 
+    public void setPublicEvent(boolean publicEvent) {
+        isPublicEvent = publicEvent;
+    }
+
     public int getEventID() {
         return eventID;
     }
 
-    public List<User> getUsersAttending() {
-        return usersAttending;
+    public String getEventDescription() {
+        return eventDescription;
     }
 
-    public String getName() {
-        return name;
+    public void setEventDescription(String newEventDescription) {
+        this.eventDescription = newEventDescription;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getEventName() {
+        return eventName;
     }
 
-    public ImageButton getImageButton() {
-        return imageButton;
+    public void setEventName(String newEventName) {
+        this.eventName = newEventName;
     }
 
-    public void setImageButton(ImageButton imageButton) {
-        this.imageButton = imageButton;
+    public ImageButton getEventLogo() {
+        return eventLogo;
     }
 
-    public Calendar getTime() {
-        return time;
+    public void setEventLogo(ImageButton newEventLogo) {
+        this.eventLogo = newEventLogo;
     }
 
-    public void setTime(Calendar time) {
-        this.time = time;
+    public Calendar getEventTime() {
+        return eventTime;
     }
 
-    public Calendar getDate() {
-        return date;
+    public void setEventTime(Calendar newEventTime) {
+        this.eventTime = newEventTime;
     }
 
-    public void setDate(Calendar date) {
-        this.date = date;
+    public Calendar getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(Calendar newEventDate) {
+        this.eventDate = newEventDate;
+    }
+
+    @Override
+    public void addGuest(User newGuest) {
+        guests.add(newGuest);
+    }
+
+    @Override
+    public void removeGuest(User guestToRemove) {
+        guests.remove(guestToRemove);
+    }
+
+    @Override
+    public List<User> getGuests() {
+        return guests;
     }
 }

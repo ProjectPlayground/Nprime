@@ -7,7 +7,7 @@ import com.chornge.nprime.users.User;
 import java.util.Calendar;
 import java.util.List;
 
-public class Event implements Guests {
+public class Event implements Attendees {
     private String eventName;
     private Calendar eventDate;
     private Calendar eventTime;

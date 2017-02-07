@@ -6,14 +6,14 @@ import com.chornge.nprime.events.Event;
 
 import java.util.List;
 
-public class User {
+public class User implements Networking {
     private String userName;
     private String userID;
     private ImageButton userPhoto;
     private String userEmail;
-    private List<User> everyoneUserIsFollowing;
-    private List<User> everyoneFollowingUser;
     private List<Event> userEventList;
+    private List<User> followers;
+    private List<User> peopleUserFollows;
 
     public User(String userID, String userEmail) {
         this.userName = "";
@@ -49,5 +49,25 @@ public class User {
 
     public void setUserName(String newUserName) {
         this.userName = newUserName;
+    }
+
+    @Override
+    public void addFollower(User user) {
+        followers.add(user);
+    }
+
+    @Override
+    public void removeFollower(User user) {
+        followers.remove(user);
+    }
+
+    @Override
+    public void startFollowing(User user) {
+        peopleUserFollows.add(user);
+    }
+
+    @Override
+    public void stopFollowing(User user) {
+        peopleUserFollows.remove(user);
     }
 }

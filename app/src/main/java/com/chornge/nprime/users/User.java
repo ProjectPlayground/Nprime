@@ -70,4 +70,12 @@ public class User implements Networking {
     public void stopFollowing(User user) {
         peopleUserFollows.remove(user);
     }
+
+    public List<User> getFollowers() {
+        return followers;
+    }
+
+    public List<User> getPeopleUserFollows() {
+        return peopleUserFollows;
+    }
 }

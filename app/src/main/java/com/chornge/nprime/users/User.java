@@ -2,20 +2,23 @@ package com.chornge.nprime.users;
 
 import android.widget.ImageButton;
 
-public class User { //implements Networking {
-    private String userName;
+public class User { //implements NetworkingInterface {
+    private String fullName;
     private ImageButton userPhoto;
     private String userEmail;
 //    private List<Event> userEventList;
 //    private List<User> followers;
 //    private List<User> peopleUserFollows;
 
+    /**
+     * look into ThreadLocal
+     */
     public User() {
         //blank default constructor
     }
 
-    public User(String userName, String userEmail) {
-        this.userName = userName;
+    public User(String fullName, String userEmail) {
+        this.fullName = fullName;
         this.userEmail = userEmail;
     }
 
@@ -27,10 +30,6 @@ public class User { //implements Networking {
         this.userPhoto = newUserPhoto;
     }
 
-    /**
-     * look into ThreadLocal
-     */
-
     public String getUserEmail() {
         return userEmail;
     }
@@ -39,39 +38,11 @@ public class User { //implements Networking {
         this.userEmail = newUserEmail;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setUserName(String newUserName) {
-        this.userName = newUserName;
+    public void setFullName(String newUserFullName) {
+        this.fullName = newUserFullName;
     }
-
-//    @Override
-//    public void addFollower(User user) {
-//        followers.add(user);
-//    }
-//
-//    @Override
-//    public void removeFollower(User user) {
-//        followers.remove(user);
-//    }
-//
-//    @Override
-//    public void startFollowing(User user) {
-//        peopleUserFollows.add(user);
-//    }
-//
-//    @Override
-//    public void stopFollowing(User user) {
-//        peopleUserFollows.remove(user);
-//    }
-
-//    public List<User> getFollowers() {
-//        return followers;
-//    }
-//
-//    public List<User> getPeopleUserFollows() {
-//        return peopleUserFollows;
-//    }
 }

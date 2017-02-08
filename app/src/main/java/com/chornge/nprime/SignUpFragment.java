@@ -25,7 +25,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -184,19 +183,16 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
                     private void initializeUser() {
                         User user = new User(sign_up_fullname, sign_up_email);
-                        UserProfileChangeRequest.Builder profilePhotoUpdate = new UserProfileChangeRequest.Builder();
-                        //profilePhotoUpdate.setPhotoUri();
-                        addNewUserToDatabase(user);
+                        saveUserToDatabase(user);
                     }
 
-                    private void addNewUserToDatabase(User user) {
-                        String dbRootDirectory = "users";
+                    private void saveUserToDatabase(User user) {
+                        String nodeForAllUsers = "users";
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        DatabaseReference reference = database.getReference(dbRootDirectory);
-                        String key = reference.push().getKey();
-                        reference.setValue(key);
-                        reference.child(dbRootDirectory + "/" + key);
-                        reference.setValue(user);
+                        DatabaseReference reference = database.getReference(nodeForAllUsers);
+                        String userKey = reference.push().getKey();
+                        reference.setValue(userKey);
+                        reference.child(userKey).setValue(user);
                     }
                 });
     }

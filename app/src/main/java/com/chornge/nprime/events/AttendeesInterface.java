@@ -2,7 +2,7 @@ package com.chornge.nprime.events;
 
 import com.chornge.nprime.users.User;
 
-interface Attendees {
+interface AttendeesInterface {
     void addGuest(User user);
 
     void removeGuest(User user);

@@ -2,7 +2,7 @@ package com.chornge.nprime.users;
 
 import com.chornge.nprime.events.Event;
 
-interface Networking {
+interface NetworkingInterface {
     void addFollower(User user);
 
     void removeFollower(User user);

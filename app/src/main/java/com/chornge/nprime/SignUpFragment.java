@@ -26,6 +26,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpFragment extends Fragment implements View.OnClickListener {
 
@@ -117,7 +119,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     public void sign_up_user() {
         final String sign_up_fullname = edit_text_full_name_sign_up.getText().toString();
         final String sign_up_email = edit_text_email_sign_up.getText().toString().trim();
-        String sign_up_password = edit_text_password_sign_up.getText().toString().trim();
+        final String sign_up_password = edit_text_password_sign_up.getText().toString().trim();
 
         if (TextUtils.isEmpty(sign_up_fullname)) {
             Toast.makeText(getActivity().getApplicationContext(),
@@ -133,11 +135,17 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
         if (TextUtils.isEmpty(sign_up_password)) {
             Toast.makeText(getActivity().getApplicationContext(),
-                    "Password must be 6 letters or more", Toast.LENGTH_SHORT).show();
+                    "Invalid Password", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        progressDialog.setMessage("Registering User...");
+        if (sign_up_password.length() < 6) {
+            Toast.makeText(getActivity().getApplicationContext(),
+                    "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        progressDialog.setMessage("Registering New User...");
         progressDialog.show();
 
         firebaseAuth.createUserWithEmailAndPassword(sign_up_email, sign_up_password)
@@ -147,24 +155,44 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                         progressDialog.dismiss();
                         if (task.isSuccessful()) {
                             initializeUser();
-                            startActivity(new Intent(getActivity().getApplication(), UserLayoutActivity.class));
+                            signInUser();
                         } else {
                             Toast.makeText(getActivity().getApplicationContext(),
                                     "Registration Failed", Toast.LENGTH_SHORT).show();
                         }
-                        progressDialog.dismiss();
                     }
 
-                    /**
-                     * Create user object and pass to user profile
-                     */
-                    private void initializeUser() {
-                        User user = new User(firebaseAuth.getCurrentUser().getUid(), sign_up_email);
-                        user.setUserName(sign_up_fullname);
+                    private void signInUser() {
+                        progressDialog.setMessage("Logging in New User...");
+                        progressDialog.show();
+                        firebaseAuth.signInWithEmailAndPassword(sign_up_email, sign_up_password)
+                                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        progressDialog.dismiss();
+                                        if (task.isSuccessful()) {
+                                            startActivity(new Intent(getActivity().getApplication(), UserLayoutActivity.class));
+                                            //
+                                        } else {
+                                            Toast.makeText(getActivity().getApplicationContext(),
+                                                    "Login Failed", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                    }
 
-                        UserProfileChangeRequest.Builder profileUpdateRequest = new UserProfileChangeRequest.Builder();
-                        profileUpdateRequest.setDisplayName(String.valueOf(sign_up_fullname));
-//                        profileUpdateRequest.build().getDisplayName();
+                    private void initializeUser() {
+                        User user = new User(sign_up_fullname, sign_up_email);
+                        UserProfileChangeRequest.Builder profilePhotoUpdate = new UserProfileChangeRequest.Builder();
+                        //profilePhotoUpdate.setPhotoUri();
+                        addNewUserToDatabase(user);
+                    }
+
+                    private void addNewUserToDatabase(User user) {
+                        String dbRootDirectory = "users";
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference reference = database.getReference(dbRootDirectory);
+                        reference.setValue(user);
                     }
                 });
     }

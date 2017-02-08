@@ -193,6 +193,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                         String dbRootDirectory = "users";
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference reference = database.getReference(dbRootDirectory);
+                        String key = reference.push().getKey();
+                        reference.child(dbRootDirectory).setValue(key);
+                        reference.child(dbRootDirectory + "/" + key);
                         reference.setValue(user);
                     }
                 });

@@ -7,46 +7,32 @@ import com.chornge.nprime.users.User;
 import java.util.Calendar;
 import java.util.List;
 
-public class Event implements Attendees {
+public class Event { //implements AttendeesInterface {
     private String eventName;
     private Calendar eventDate;
     private Calendar eventTime;
     private String eventDescription = " ";
+    private List<Message> messages;
     private List<User> guestList;
     private User eventCreator;
-    private List<User> admins;
-    private boolean isPublicEvent = true;
-    private int eventID;
+    private String eventType = "public";
     private ImageButton eventLogo;
 
-    public Event(int eventID, String eventName, User eventCreator) {
-        this.eventID = eventID;
+    public Event(String eventName, User eventCreator) {
         this.eventName = eventName;
         this.eventCreator = eventCreator;
     }
 
-    public List<User> getAdmins() {
-        return admins;
-    }
-
     public String getEventCreator() {
-        return eventCreator.getUserName();
+        return eventCreator.getFullName();
     }
 
-    public void setAdmin(User newAdmin) {
-        admins.add(newAdmin);
+    public String getEventType() {
+        return eventType;
     }
 
-    public boolean isPublicEvent() {
-        return isPublicEvent;
-    }
-
-    public void setPublicEvent(boolean publicEvent) {
-        isPublicEvent = publicEvent;
-    }
-
-    public int getEventID() {
-        return eventID;
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
     }
 
     public String getEventDescription() {
@@ -55,6 +41,10 @@ public class Event implements Attendees {
 
     public void setEventDescription(String newEventDescription) {
         this.eventDescription = newEventDescription;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
     }
 
     public String getEventName() {
@@ -87,16 +77,6 @@ public class Event implements Attendees {
 
     public void setEventDate(Calendar newEventDate) {
         this.eventDate = newEventDate;
-    }
-
-    @Override
-    public void addGuest(User newGuest) {
-        guestList.add(newGuest);
-    }
-
-    @Override
-    public void removeGuest(User guestToRemove) {
-        guestList.remove(guestToRemove);
     }
 
     public List<User> getGuests() {

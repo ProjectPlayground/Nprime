@@ -15,7 +15,7 @@ interface NetworkingInterface {
 
     void removeEvent(Event event);
 
-    void createEvent(Event event);
+    void createEvent(Event event, User eventCreator);
 
     void deleteEvent(Event event);
 }

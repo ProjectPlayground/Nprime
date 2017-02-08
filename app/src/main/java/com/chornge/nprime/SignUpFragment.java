@@ -171,7 +171,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         progressDialog.dismiss();
                                         if (task.isSuccessful()) {
-                                            startActivity(new Intent(getActivity().getApplication(), UserLayoutActivity.class));
+                                            startActivity(new Intent(getActivity().getApplication(),
+                                                    UserLayoutActivity.class));
                                             //
                                         } else {
                                             Toast.makeText(getActivity().getApplicationContext(),

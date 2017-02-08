@@ -9,14 +9,18 @@ import java.util.List;
 
 public class Event { //implements AttendeesInterface {
     private String eventName;
-    private Calendar eventDate;
-    private Calendar eventTime;
+    private Calendar eventStart;
+    private Calendar eventEnd;
     private String eventDescription = " ";
     private List<Message> messages;
     private List<User> guestList;
     private User eventCreator;
     private String eventType = "public";
     private ImageButton eventLogo;
+
+    public Event() {
+        //blank default constructor
+    }
 
     public Event(String eventName, User eventCreator) {
         this.eventName = eventName;
@@ -25,6 +29,10 @@ public class Event { //implements AttendeesInterface {
 
     public String getEventCreator() {
         return eventCreator.getFullName();
+    }
+
+    public void setEventCreator(User eventCreator) {
+        this.eventCreator = eventCreator;
     }
 
     public String getEventType() {
@@ -63,20 +71,20 @@ public class Event { //implements AttendeesInterface {
         this.eventLogo = newEventLogo;
     }
 
-    public Calendar getEventTime() {
-        return eventTime;
+    public Calendar getEventEnd() {
+        return eventEnd;
     }
 
-    public void setEventTime(Calendar newEventTime) {
-        this.eventTime = newEventTime;
+    public void setEventEnd(Calendar eventEnd) {
+        this.eventEnd = eventEnd;
     }
 
-    public Calendar getEventDate() {
-        return eventDate;
+    public Calendar getEventStart() {
+        return eventStart;
     }
 
-    public void setEventDate(Calendar newEventDate) {
-        this.eventDate = newEventDate;
+    public void setEventStart(Calendar eventStart) {
+        this.eventStart = eventStart;
     }
 
     public List<User> getGuests() {

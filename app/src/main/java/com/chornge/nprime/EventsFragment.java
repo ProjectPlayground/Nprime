@@ -49,7 +49,6 @@ public class EventsFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
     }
 
     @Override
@@ -57,6 +56,8 @@ public class EventsFragment extends Fragment implements View.OnClickListener,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_events, container, false);
+
+        setRetainInstance(true);
 
         Typeface robotoBold = Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Bold.ttf");
 
@@ -83,27 +84,6 @@ public class EventsFragment extends Fragment implements View.OnClickListener,
             Log.e("Fourth Tab Fragment", "loaded");
             isTabLoaded = true;
         }
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
     }
 
     @Override
@@ -191,5 +171,33 @@ public class EventsFragment extends Fragment implements View.OnClickListener,
 
     private boolean checkIfDeviceHasCamera(Context context) {
         return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    /**
+     * OnDestroy won't be called because of setRetainValue; onDetatch will be called instead.
+     */
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
     }
 }

@@ -18,6 +18,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TimePicker;
 
+import com.chornge.nprime.events.Event;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -34,16 +38,24 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat timeFormatter;
 
+    private EditText edit_text_create_event_name;
     private EditText editTextFromDate;
     private EditText editTextToDate;
     private EditText editTextStartTime;
     private EditText editTextEndTime;
     private ImageButton create_event_image;
+    private Event event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+
+        event = new Event();
+        String dbRootDirectory = "events";
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference(dbRootDirectory);
+        reference.setValue(event);
 
         Calendar newCal = Calendar.getInstance();
         Calendar eventCalendar = Calendar.getInstance();
@@ -51,6 +63,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
         timeFormatter = new SimpleDateFormat("h:mm a", Locale.US);
 
         fab = (FloatingActionButton) findViewById(R.id.create_event_fab);
+        edit_text_create_event_name = (EditText) findViewById(R.id.edit_text_create_event_name);
         editTextFromDate = (EditText) findViewById(R.id.edit_text_from_date);
         editTextToDate = (EditText) findViewById(R.id.edit_text_to_date);
         editTextStartTime = (EditText) findViewById(R.id.edit_text_start_time);
@@ -156,17 +169,18 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        if (view == fab) {
-//            Calendar calendar = Calendar.getInstance();
-            Snackbar.make(view, "Event Created", Snackbar.LENGTH_SHORT).show();
-        }
-
         if (view == create_event_image) {
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent,
                     "Select Picture"), SELECT_PICTURE);
+        }
+
+        if (view == fab) {
+            event.setEventName(edit_text_create_event_name.getText().toString());
+//            Calendar calendar = Calendar.getInstance();
+            Snackbar.make(view, "Event Created", Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -177,26 +191,12 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
                 String selectedImagePath = getPath(selectedImageUri);
                 create_event_image.setImageIcon(Icon.createWithContentUri(selectedImageUri));
                 create_event_image.setImageURI(selectedImageUri);
+                event.setEventLogo(create_event_image);
             }
         }
     }
 
     public String getPath(Uri uri) {
-//        // try to retrieve the image from the media store first
-//        // this will only work for images selected from gallery
-
-//        String[] projection = {MediaStore.Images.Media.DATA};
-//        Cursor cursor = getContext().getContentResolver().query(uri, projection, null, null, null);
-//        if (cursor != null) {
-//            int column_index = cursor
-//                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//            cursor.moveToFirst();
-////            cursor.close();
-//            return cursor.getString(column_index);
-//        }
-//        // this is our fallback here
-//        return uri.getPath();
-
         String res = null;
         String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(uri, proj, null, null, null);

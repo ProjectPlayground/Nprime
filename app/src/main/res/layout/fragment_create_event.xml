@@ -1,91 +1,101 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/create_event_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="8dp"
+    android:scrollbars="none"
     tools:context=".CreateEventFragment">
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp"
-        android:scrollbars="none">
+        android:layout_height="500dp">
 
-        <RelativeLayout
+        <ImageButton
+            android:id="@+id/create_event_image"
             android:layout_width="match_parent"
-            android:layout_height="500dp">
+            android:layout_height="204dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_camera_black_24dp" />
 
-            <ImageButton
-                android:id="@+id/create_event_image"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:scaleType="center"
-                android:src="@drawable/ic_camera_black_24dp" />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/create_event_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/create_event_image"
+            android:layout_marginTop="4dp">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/create_event_name"
+            <EditText
+                android:id="@+id/edit_text_create_event_name"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/create_event_image"
-                android:layout_marginTop="8dp">
+                android:layout_height="wrap_content"
+                android:hint="Event Name"
+                android:inputType="text"
+                android:textColorHint="#000" />
+
+            <LinearLayout
+                android:id="@+id/date_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
                 <EditText
-                    android:id="@+id/edit_text_create_event_name"
-                    android:layout_width="match_parent"
+                    android:id="@+id/edit_text_from_date"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="Event Name"
-                    android:inputType="text" />
+                    android:layout_weight="1"
+                    android:hint="From" />
 
-            </android.support.design.widget.TextInputLayout>
+                <EditText
+                    android:id="@+id/edit_text_to_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="To" />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/create_event_time"
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/time_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/create_event_name"
-                android:layout_marginTop="8dp">
+                android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/pick_date_and_time_text_view"
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/edit_text_start_time"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="4dp"
-                    android:text="Choose Date and Time Below"
-                    android:textColor="#000"
-                    android:textSize="20sp" />
+                    android:layout_weight="1"
+                    android:hint="Start Time" />
 
-                <DatePicker
-                    android:id="@+id/date_picker"
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/edit_text_end_time"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/pick_date_and_time_text_view"
-                    android:layout_marginTop="4dp" />
+                    android:layout_weight="1"
+                    android:hint="End Time" />
 
-                <TimePicker
-                    android:id="@+id/time_picker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/date_picker"
-                    android:layout_marginTop="4dp" />
+            </LinearLayout>
 
-                <!--<EditText-->
-                <!--android:id="@+id/edit_text_create_event_time"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:hint="Event Time"-->
-                <!--android:inputType="text" />-->
+        </android.support.design.widget.TextInputLayout>
 
-            </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/create_event_fab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_menu_send" />
 
-            <android.support.design.widget.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/create_event_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="38dp"
+            android:text="Add an Image"
+            android:textColor="#000"
+            android:textSize="32sp" />
 
-        </RelativeLayout>
+    </RelativeLayout>
 
-    </ScrollView>
-
-</RelativeLayout>
+</ScrollView>

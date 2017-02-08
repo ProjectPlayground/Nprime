@@ -201,7 +201,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        email_address_sign_up.hasFocus();
+        edit_text_full_name_sign_up.hasFocus();
+        edit_text_full_name_sign_up.setText("");
         edit_text_email_sign_up.setText("");
         edit_text_password_sign_up.setText("");
     }

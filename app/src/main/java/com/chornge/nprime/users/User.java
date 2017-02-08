@@ -15,6 +15,10 @@ public class User implements Networking {
     private List<User> followers;
     private List<User> peopleUserFollows;
 
+    public User() {
+        //blank default constructor required for firebase
+    }
+
     public User(String userID, String userEmail) {
         this.userName = "";
         this.userID = userID;

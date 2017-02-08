@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chornge.nprime.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -126,7 +125,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressDialog.dismiss();
                         if (task.isSuccessful()) {
-                            loginUser();
                             startActivity(new Intent(getActivity().getApplication(),
                                     UserLayoutActivity.class));
                         } else {
@@ -142,15 +140,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                             }
                         }
                         progressDialog.dismiss();
-                    }
-
-                    private void loginUser() {
-                        firebaseAuth.getCurrentUser().getUid();
-                        User user = new User(firebaseAuth.getCurrentUser().getUid(), sign_in_email);
-                        user.setUserName(firebaseAuth.getCurrentUser().getDisplayName());
-
-                        //UserLayoutActivity.newInstance(user);
-                        //UserProfileFragment.newInstance(user);
                     }
                 });
     }

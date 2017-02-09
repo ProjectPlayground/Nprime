@@ -3,12 +3,12 @@ package com.chornge.nprime;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 
-public class PagerAdapter extends FragmentPagerAdapter {
+class PagerAdapter extends FragmentPagerAdapter {
 
-    int tabCount;
+    private int tabCount;
 
     //mandatory constructor
-    public PagerAdapter(android.support.v4.app.FragmentManager fm, int numberOfTabs) {
+    PagerAdapter(android.support.v4.app.FragmentManager fm, int numberOfTabs) {
         super(fm);
         this.tabCount = numberOfTabs;
     }

@@ -1,34 +1,33 @@
 package com.chornge.nprime;
 
+class FeedItem {
+    private String title;
+    private String link;
+    private String description;
+    private String pubDate;
+    private String thumbNail;
 
-public class FeedItem {
-    String title;
-    String link;
-    String description;
-    String pubDate;
-    String thumbNail;
-
-    public String getDescription() {
+    String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    void setDescription(String description) {
         this.description = description;
     }
 
-    public String getLink() {
+    String getLink() {
         return link;
     }
 
-    public void setLink(String link) {
+    void setLink(String link) {
         this.link = link;
     }
 
-    public String getPubDate() {
+    String getPubDate() {
         return pubDate;
     }
 
-    public void setPubDate(String pubDate) {
+    void setPubDate(String pubDate) {
         this.pubDate = pubDate;
     }
 

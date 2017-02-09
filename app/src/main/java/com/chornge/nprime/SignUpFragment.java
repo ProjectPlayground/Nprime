@@ -191,8 +191,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference reference = database.getReference(nodeForAllUsers);
                         String userKey = reference.push().getKey();
+                        user.setUserID(userKey);
                         reference.setValue(userKey);
-                        reference.child(userKey).setValue(user);
+                        reference.child(user.getUserID()).setValue(user);
                     }
                 });
     }

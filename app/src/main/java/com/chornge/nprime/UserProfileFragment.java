@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,13 +31,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.Calendar;
 
 import static android.app.Activity.RESULT_OK;
 
-public class UserProfileFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener, Runnable {
+public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
+        View.OnClickListener, Runnable {
 
     public static final int RESULT_GALLERY = 0;
     private static final String KEY_NAME = "key_name";
@@ -96,7 +95,8 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         switch (requestCode) {
             case 101: {
                 if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast toast = Toast.makeText(getContext(), "Unable to show Location. Permission is Required", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(getContext(),
+                            "Unable to show Location. Permission is Required", Toast.LENGTH_LONG);
                     toast.show();
                 }
             }
@@ -110,16 +110,19 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         //inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
+        setRetainInstance(true);
+
         ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
                 .hideSoftInputFromWindow(view.getWindowToken(), 0);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
         TextView userProfileName = (TextView) view.findViewById(R.id.user_profile_name);
-        UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
-        builder.build().getDisplayName();
-        userProfileName.setText(builder.build().getDisplayName());
-        userProfileName.setTextColor(Color.MAGENTA);
+        //
+//        UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
+//        builder.build().getDisplayName();
+//        userProfileName.setText(builder.build().getDisplayName());
+//        userProfileName.setTextColor(Color.MAGENTA);
 
         location_text = (TextView) view.findViewById(R.id.location_text);
         location_text.setOnClickListener(this);
@@ -188,13 +191,6 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
 //            //restore fragment's state
 //        }
 //    }
-//
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//
-//        //save fragment's state here
-//    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -208,21 +204,6 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
     }
 
     public String getPath(Uri uri) {
-//        // try to retrieve the image from the media store first
-//        // this will only work for images selected from gallery
-
-//        String[] projection = {MediaStore.Images.Media.DATA};
-//        Cursor cursor = getContext().getContentResolver().query(uri, projection, null, null, null);
-//        if (cursor != null) {
-//            int column_index = cursor
-//                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//            cursor.moveToFirst();
-////            cursor.close();
-//            return cursor.getString(column_index);
-//        }
-//        // this is our fallback here
-//        return uri.getPath();
-
         String res = null;
         String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContext().getContentResolver().query(uri, proj, null, null, null);
@@ -265,8 +246,6 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onResume() {
         super.onResume();
-//        if (mMap != null)
-//            mMap.getCameraPosition();
     }
 
     @Override

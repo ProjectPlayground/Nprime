@@ -1,24 +1,29 @@
 package com.chornge.nprime;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.chornge.nprime.events.Event;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -29,7 +34,7 @@ import java.util.Locale;
 public class CreateEventActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int SELECT_PICTURE = 1;
-    private FloatingActionButton fab;
+    private FloatingActionButton floatingActionButton;
     private DatePickerDialog datePickerDialogFrom;
     private DatePickerDialog datePickerDialogTo;
 
@@ -37,48 +42,52 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
     private TimePickerDialog timePickerDialogEnd;
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat timeFormatter;
+    private TextInputLayout create_event_input_layout; // TODO: 2/9/2017 Add Animation to TextInputLayout
+    private Switch eventTypeSwitch;
 
+    private TextView add_an_image_text;
     private EditText edit_text_create_event_name;
     private EditText editTextFromDate;
     private EditText editTextToDate;
     private EditText editTextStartTime;
     private EditText editTextEndTime;
     private ImageButton create_event_image;
-    private Event event;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
 
-        event = new Event();
-        String dbRootDirectory = "events";
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference reference = database.getReference(dbRootDirectory);
-        reference.setValue(event);
+        progressDialog = new ProgressDialog(this);
 
         Calendar newCal = Calendar.getInstance();
         Calendar eventCalendar = Calendar.getInstance();
         dateFormatter = new SimpleDateFormat("EEE, MMM d, yyyy", Locale.US);
         timeFormatter = new SimpleDateFormat("h:mm a", Locale.US);
 
-        fab = (FloatingActionButton) findViewById(R.id.create_event_fab);
+        eventTypeSwitch = (Switch) findViewById(R.id.event_switch);
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.create_event_fab);
+        create_event_input_layout = (TextInputLayout) findViewById(R.id.create_event_input_layout);
         edit_text_create_event_name = (EditText) findViewById(R.id.edit_text_create_event_name);
         editTextFromDate = (EditText) findViewById(R.id.edit_text_from_date);
         editTextToDate = (EditText) findViewById(R.id.edit_text_to_date);
         editTextStartTime = (EditText) findViewById(R.id.edit_text_start_time);
         editTextEndTime = (EditText) findViewById(R.id.edit_text_end_time);
+        add_an_image_text = (TextView) findViewById(R.id.add_an_image_text);
         create_event_image = (ImageButton) findViewById(R.id.create_event_image);
 
-        editTextFromDate.setInputType(InputType.TYPE_NULL);
-        //editTextFromDate.setText(dateFormatter.format(newCal.getTime()));
-        editTextToDate.setInputType(InputType.TYPE_NULL);
+        editTextFromDate.setInputType(InputType.TYPE_CLASS_DATETIME);
+        //editTextFromDate.setText(dateFormatter.format(newCal.getTime().getDate()));
+        editTextToDate.setInputType(InputType.TYPE_CLASS_DATETIME);
         //editTextToDate.setText(dateFormatter.format(newCal.getTime()));
 
-        editTextStartTime.setInputType(InputType.TYPE_NULL);
+        editTextStartTime.setInputType(InputType.TYPE_CLASS_DATETIME);
         //editTextStartTime.setText(timeFormatter.format(newCal.getTime()));
-        editTextEndTime.setInputType(InputType.TYPE_NULL);
+        editTextEndTime.setInputType(InputType.TYPE_CLASS_DATETIME);
         //editTextEndTime.setText(timeFormatter.format(newCal.getTime()));
+
+        floatingActionButton.hasFocus();
 
         editTextFromDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -164,23 +173,62 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
 
     private void setOnClickListeners() {
         create_event_image.setOnClickListener(this);
-        fab.setOnClickListener(this);
+        floatingActionButton.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         if (view == create_event_image) {
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent,
-                    "Select Picture"), SELECT_PICTURE);
+            Intent intent = new Intent().setType("image/*").setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
+            add_an_image_text.setVisibility(View.INVISIBLE);
         }
 
-        if (view == fab) {
+        if (view == floatingActionButton) {
+            //initializeEvent();
+            progressDialog.setMessage("Creating " + edit_text_create_event_name.getText().toString() + "...");
+            progressDialog.show();
+            Event event = new Event(FirebaseAuth.getInstance().getCurrentUser().getUid());
             event.setEventName(edit_text_create_event_name.getText().toString());
-//            Calendar calendar = Calendar.getInstance();
-            Snackbar.make(view, "Event Created", Snackbar.LENGTH_SHORT).show();
+            if (eventTypeSwitch.isChecked()) {
+                event.setEventType("Public");
+            } else {
+                event.setEventType("Private");
+            }
+
+            event.setEventDescription("Event Description");
+
+            String nodeForAllEvents = "events";
+            FirebaseDatabase eventDb = FirebaseDatabase.getInstance();
+            DatabaseReference eventReference = eventDb.getReference(nodeForAllEvents);
+            progressDialog.setMessage("Creating " + edit_text_create_event_name.getText().toString() + "...");
+            progressDialog.show();
+            String eventKey = eventReference.push().getKey();
+            event.setEventID(eventKey);
+            eventReference.setValue(event.getEventID());
+
+//            String nodeForCurrentUser = "user";
+//            User user = new User();
+//            FirebaseDatabase userDb = FirebaseDatabase.getInstance();
+//            DatabaseReference userReference = userDb.getReference(
+//                    nodeForCurrentUser + '/' + FirebaseAuth.getInstance().getCurrentUser().getUid());
+//            user.attachEventToUser(event.getEventID());
+
+            //userReference.
+            //reference.child(nodeForAllEvents).setValue(event);
+
+            /**
+             * Wait slightly ~ 3 secs before returning user to previous activity
+             */
+
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.dismiss();
+                    finish();
+                }
+            }, 3072);
         }
     }
 
@@ -191,7 +239,6 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
                 String selectedImagePath = getPath(selectedImageUri);
                 create_event_image.setImageIcon(Icon.createWithContentUri(selectedImageUri));
                 create_event_image.setImageURI(selectedImageUri);
-                event.setEventLogo(create_event_image);
             }
         }
     }

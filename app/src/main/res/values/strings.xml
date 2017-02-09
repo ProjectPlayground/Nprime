@@ -36,4 +36,5 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="test_fragment">Blank fragment</string>
+    <string name="create_event_image_content_desc" />
 </resources>

@@ -5,6 +5,7 @@ import android.widget.ImageButton;
 import com.chornge.nprime.users.User;
 
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Event { //implements AttendeesInterface {
@@ -12,27 +13,31 @@ public class Event { //implements AttendeesInterface {
     private Calendar eventStart;
     private Calendar eventEnd;
     private String eventDescription = " ";
-    private List<Message> messages;
-    private List<User> guestList;
-    private User eventCreator;
-    private String eventType = "public";
+    private List<Message> messages = new LinkedList<>();
+    private List<User> guestList = new LinkedList<>();
+    private String eventCreatorID;
+    private String eventID;
+    private String eventType;
     private ImageButton eventLogo;
 
     public Event() {
         //blank default constructor
     }
 
-    public Event(String eventName, User eventCreator) {
-        this.eventName = eventName;
-        this.eventCreator = eventCreator;
+    public Event(String eventCreatorID) {
+        this.eventCreatorID = eventCreatorID;
+    }
+
+    public String getEventID() {
+        return eventID;
+    }
+
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
     }
 
     public String getEventCreator() {
-        return eventCreator.getFullName();
-    }
-
-    public void setEventCreator(User eventCreator) {
-        this.eventCreator = eventCreator;
+        return eventCreatorID;
     }
 
     public String getEventType() {

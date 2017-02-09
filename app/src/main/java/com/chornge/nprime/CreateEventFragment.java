@@ -14,7 +14,6 @@ public class CreateEventFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static CreateEventFragment newInstance(String param1) {
         CreateEventFragment fragment = new CreateEventFragment();
 //        Bundle args = new Bundle();
@@ -27,7 +26,7 @@ public class CreateEventFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-
+            //;
         }
     }
 

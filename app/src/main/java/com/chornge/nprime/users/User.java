@@ -19,6 +19,7 @@ public class User { //implements NetworkingInterface {
      */
     public User() {
         //blank default constructor
+        this.userPhoto = null;
     }
 
     public User(String userID) {

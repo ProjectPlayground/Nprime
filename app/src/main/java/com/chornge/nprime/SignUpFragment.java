@@ -55,32 +55,41 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(getActivity());
 
-        Typeface robotoRegular = Typeface.createFromAsset(getActivity().getAssets(),
-                "font/Roboto-Regular.ttf");
-        Typeface robotoBlack = Typeface.createFromAsset(getActivity().getAssets(),
-                "font/Roboto-Black.ttf");
+        setUpViewObjects(view);
+        setUpAnimations();
 
+        already_a_user.setOnClickListener(this);
+        sign_up_button.setOnClickListener(this);
+
+        return view;
+    }
+
+    private void setUpViewObjects(View view) {
         sign_up_button = (Button) view.findViewById(R.id.sign_up_button);
-        sign_up_button.setTypeface(robotoBlack);
+        sign_up_button.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),
+                "font/Roboto-Black.ttf"));
         user_registration_text = (TextView) view.findViewById(R.id.user_registration_text);
-        user_registration_text.setTypeface(robotoBlack);
-        already_a_user = (TextView) view.findViewById(R.id.already_a_user);
-        already_a_user.setTypeface(robotoRegular);
+        user_registration_text.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),
+                "font/Roboto-Black.ttf"));
 
+        already_a_user = (TextView) view.findViewById(R.id.already_a_user);
+        already_a_user.setTypeface(setRobotoRegularFontStyle());
         full_name_sign_up = (TextInputLayout) view.findViewById(R.id.full_name_sign_up);
-        full_name_sign_up.setTypeface(robotoRegular);
+        full_name_sign_up.setTypeface(setRobotoRegularFontStyle());
         email_address_sign_up = (TextInputLayout) view.findViewById(R.id.email_address_sign_up);
-        email_address_sign_up.setTypeface(robotoRegular);
+        email_address_sign_up.setTypeface(setRobotoRegularFontStyle());
         password_sign_up = (TextInputLayout) view.findViewById(R.id.password_sign_up);
-        password_sign_up.setTypeface(robotoRegular);
+        password_sign_up.setTypeface(setRobotoRegularFontStyle());
 
         edit_text_full_name_sign_up = (EditText) view.findViewById(R.id.edit_text_full_name_sign_up);
-        edit_text_full_name_sign_up.setTypeface(robotoRegular);
+        edit_text_full_name_sign_up.setTypeface(setRobotoRegularFontStyle());
         edit_text_email_sign_up = (EditText) view.findViewById(R.id.edit_text_email_sign_up);
-        edit_text_email_sign_up.setTypeface(robotoRegular);
+        edit_text_email_sign_up.setTypeface(setRobotoRegularFontStyle());
         edit_text_password_sign_up = (EditText) view.findViewById(R.id.edit_text_password_sign_up);
-        edit_text_password_sign_up.setTypeface(robotoRegular);
+        edit_text_password_sign_up.setTypeface(setRobotoRegularFontStyle());
+    }
 
+    private void setUpAnimations() {
         final Animation translateFromTop = AnimationUtils.loadAnimation(
                 getActivity().getApplicationContext(), R.anim.translate_from_top);
         final Animation translateFromBottom = AnimationUtils.loadAnimation(
@@ -92,25 +101,25 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         password_sign_up.setAnimation(translateFromTop);
         sign_up_button.setAnimation(translateFromBottom);
         already_a_user.setAnimation(translateFromBottom);
+    }
 
-        already_a_user.setOnClickListener(this);
-        sign_up_button.setOnClickListener(this);
-
-        return view;
+    private Typeface setRobotoRegularFontStyle() {
+        return Typeface.createFromAsset(getActivity().getAssets(),
+                "font/Roboto-Regular.ttf");
     }
 
     @Override
     public void onClick(View view) {
-        if (view == sign_up_button) {
-            sign_up_user();
-        }
-
         if (view == already_a_user) {
             SignInFragment signInFragment = new SignInFragment();
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.welcome_layout_screen, signInFragment, signInFragment.getTag())
                     .commit();
+        }
+
+        if (view == sign_up_button) {
+            sign_up_user();
         }
     }
 
@@ -143,6 +152,11 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             return;
         }
 
+        registerUser(sign_up_email, sign_up_password, sign_up_fullname);
+    }
+
+    private void registerUser(final String sign_up_email, final String sign_up_password,
+                              final String sign_up_fullname) {
         progressDialog.setMessage("Registering New User...");
         progressDialog.show();
 
@@ -152,14 +166,15 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressDialog.dismiss();
                         if (task.isSuccessful()) {
-                            signInUser();
+                            signInUser(sign_up_email, sign_up_password, sign_up_fullname);
                         } else {
                             Toast.makeText(getActivity().getApplicationContext(),
                                     "Registration Failed", Toast.LENGTH_SHORT).show();
                         }
                     }
 
-                    private void signInUser() {
+                    private void signInUser(final String sign_up_email, String sign_up_password,
+                                            final String sign_up_fullname) {
                         progressDialog.setMessage("Logging in New User...");
                         progressDialog.show();
                         firebaseAuth.signInWithEmailAndPassword(sign_up_email, sign_up_password)
@@ -168,7 +183,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         progressDialog.dismiss();
                                         if (task.isSuccessful()) {
-                                            setUpUser();
+                                            setUpUser(sign_up_fullname);
                                         } else {
                                             Toast.makeText(getActivity().getApplicationContext(),
                                                     "Login Failed", Toast.LENGTH_SHORT).show();
@@ -177,16 +192,10 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                 });
                     }
 
-                    private void setUpUser() {
+                    private void setUpUser(String sign_up_fullname) {
                         User user = new User(sign_up_fullname, sign_up_email);
                         saveUserToDatabase(user);
                         passUserData(user);
-                    }
-
-                    private void passUserData(User user) {
-                        Intent intent = new Intent(getActivity(), UserLayoutActivity.class);
-                        intent.putExtra("userData", user);
-                        startActivity(intent);
                     }
 
                     private void saveUserToDatabase(User user) {
@@ -194,10 +203,17 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference reference = database.getReference(nodeForAllUsers);
 
+                        //noinspection ConstantConditions - To prevent NullPointer on .getUiD()
                         String userKey = firebaseAuth.getCurrentUser().getUid();
                         user.setUserID(userKey);
                         reference.setValue(userKey);
                         reference.child(user.getUserID()).setValue(user);
+                    }
+
+                    private void passUserData(User user) {
+                        Intent intent = new Intent(getActivity(), UserLayoutActivity.class);
+                        intent.putExtra("userData", user);
+                        startActivity(intent);
                     }
                 });
     }

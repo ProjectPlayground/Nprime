@@ -113,7 +113,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
     }
 
     /**
-     * OnFocusListeners check to see when the user has clicked on a view (date input container
+     * OnFocusListeners check to see when the user has put a view in focus (clicking on date input
      * or time input container).
      * When this happens, the date picker input dialog is shown, and it will only show when the
      * view is in focus.
@@ -233,8 +233,6 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
                 @Override
                 public void run() {
                     progressDialog.dismiss();
-                    //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-                    //getActivity().getSupportFragmentManager().popBackStack();f
                     finish();
                 }
             }, 2048);
@@ -268,8 +266,8 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
         String eventKey = eventReference.push().getKey();
         event.setEventID(eventKey);
         eventReference.setValue(eventKey);
-        eventReference.child(nodeForAllEvents + '/' + eventKey).setValue(event);
-        addEventToCreatorEventList(event.getEventID());
+        eventReference.child(nodeForAllEvents).child(eventKey).setValue(event);
+        addEventToCreatorEventList(eventKey);
     }
 
     //private void addEventToPhoneCalendar(Event event) { }
@@ -278,14 +276,14 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
         //User user = new User();
 
         String creatorID = firebaseAuth.getCurrentUser().getUid();
-        String nodeForThisUser = "dbroot/users" + '/' + creatorID;
+        String nodeForCreator = "dbroot/users";
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference(nodeForThisUser
-                + '/' + "userEvents");
+        DatabaseReference databaseReference = firebaseDatabase.getReference(nodeForCreator);
+        databaseReference.child(nodeForCreator).child(creatorID).child("userEvents").setValue(eventID);
 
         //user = DataSnapshot.getValue(User.class);
         //databaseReference.orderByChild(String s);
-        databaseReference.setValue(eventID); //TODO use DataSnapshot to acquire actual event object
+        //TODO use DataSnapshot to acquire actual event object
         //user.attachEventToUser(eventID);
     }
 

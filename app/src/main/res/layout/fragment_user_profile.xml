@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#777"
+    android:background="#f1ae1f"
     android:padding="4dp">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#FF424242"
         android:paddingBottom="32dp"
         android:scrollbars="none">
 
@@ -45,7 +46,6 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="16dp"
                     android:gravity="center"
-                    android:text="Houston, TX"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -58,7 +58,7 @@
                     android:background="@drawable/profile_pic"
                     android:contentDescription="@string/content_desc_user_profile_img"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/img" />
+                    android:src="@drawable/profile_pic" />
 
                 <ImageButton
                     android:id="@+id/calendar_event_button"
@@ -79,6 +79,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/followings_text"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="8dp"
@@ -87,6 +88,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/followers_text"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="568 Followers"
@@ -100,7 +102,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="192dp"
-                android:background="#030303"
+                android:layout_marginTop="4dp"
+                android:background="#c8c8c8"
                 android:orientation="vertical">
 
                 <TextView
@@ -109,7 +112,7 @@
                     android:gravity="center"
                     android:padding="4dp"
                     android:text="Event Name"
-                    android:textColor="#FED62F"
+                    android:textColor="#000"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -131,8 +134,8 @@
                 android:id="@+id/mapContainer"
                 android:layout_width="match_parent"
                 android:layout_height="152dp"
-                android:layout_marginTop="8dp"
-                android:background="#030303"
+                android:layout_marginTop="4dp"
+                android:background="#6e6d6d"
                 android:orientation="horizontal" />
 
         </LinearLayout>

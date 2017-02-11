@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
@@ -57,14 +58,12 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
 
     }
 
-    public static UserProfileFragment newInstance(User u) {
+    public static UserProfileFragment newInstance(User user) {
         UserProfileFragment fragment = new UserProfileFragment();
-        fragment.setUserObject(u);
+        Bundle userBundle = new Bundle();
+        userBundle.putParcelable("userProfileData", user);
+        fragment.setArguments(userBundle);
         return fragment;
-    }
-
-    public void setUserObject(User u) {
-        userObject = u;
     }
 
     @Override
@@ -75,7 +74,7 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         mapFragment.getMapAsync(this);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.mapContainer, mapFragment).commit();
-        setRetainInstance(true);
+        //setRetainInstance(true);
     }
 
     protected void requestPermission(String permissionType, int
@@ -110,19 +109,22 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         //inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
-        setRetainInstance(true);
+        //setRetainInstance(true);
 
         ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
                 .hideSoftInputFromWindow(view.getWindowToken(), 0);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        TextView userProfileName = (TextView) view.findViewById(R.id.user_profile_name);
+        userObject = new User();
+        //userObject = getArguments().getParcelable("userProfileData");
+        //userObject.getUserID();
         //
-//        UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
-//        builder.build().getDisplayName();
-//        userProfileName.setText(builder.build().getDisplayName());
-//        userProfileName.setTextColor(Color.MAGENTA);
+
+        TextView userProfileName = (TextView) view.findViewById(R.id.user_profile_name);
+        //userProfileName.setText(userObject.getFullName());
+
+        userProfileName.setTextColor(Color.BLACK);
 
         location_text = (TextView) view.findViewById(R.id.location_text);
         location_text.setOnClickListener(this);
@@ -166,31 +168,20 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        GoogleMap mMap = googleMap;
         UiSettings mapSettings;
 
-        //if (mMap != null) {
         if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(),
                 android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mapSettings = mMap.getUiSettings();
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
+        googleMap.setMyLocationEnabled(true);
+        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mapSettings = googleMap.getUiSettings();
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(13));
         mapSettings.setScrollGesturesEnabled(false);
         mapSettings.setZoomGesturesEnabled(false);
     }
-
-//    @Override
-//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//
-//        if (savedInstanceState != null) {
-//            //restore fragment's state
-//        }
-//    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -231,6 +222,7 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
 
         if (view == location_text) {
             MapDialogFragment mapDialogFragment = new MapDialogFragment();
+
 //            //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 //            FragmentManager fragmentManager = getChildFragmentManager();
 //            mapDialogFragment.show(fragmentManager, mapDialogFragment.getTag());

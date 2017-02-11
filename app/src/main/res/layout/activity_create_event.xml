@@ -30,6 +30,7 @@
                 android:id="@+id/edit_text_create_event_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:hint="Event Name"
                 android:inputType="text"
                 android:textColorHint="#000" />
@@ -40,14 +41,14 @@
                 android:layout_height="match_parent">
 
                 <EditText
-                    android:id="@+id/edit_text_from_date"
+                    android:id="@+id/edit_text_start_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="From" />
 
                 <EditText
-                    android:id="@+id/edit_text_to_date"
+                    android:id="@+id/edit_text_end_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

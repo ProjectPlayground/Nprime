@@ -35,24 +35,34 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
 
     private static final int SELECT_PICTURE = 1;
     private FloatingActionButton floatingActionButton;
-    private DatePickerDialog datePickerDialogFrom;
-    private DatePickerDialog datePickerDialogTo;
 
-    private TimePickerDialog timePickerDialogStart;
-    private TimePickerDialog timePickerDialogEnd;
+    private Calendar newCal;
+    private Calendar newCalTo;
+    private Calendar newCalFrom;
+    private Calendar newTimeEnd;
+    private Calendar newTimeStart;
+
+    private DatePickerDialog startDatePickerDialog;
+    private DatePickerDialog endDatePickerDialog;
+    private TimePickerDialog startTimePickerDialog;
+    private TimePickerDialog endTimePickerDialog;
+
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat timeFormatter;
-    private TextInputLayout create_event_input_layout; // TODO: 2/9/2017 Add Animation to TextInputLayout
+    private TextInputLayout create_event_input_layout; //TODO: 2/9/2017 Add Animation to InputLayout
     private Switch eventTypeSwitch;
-
     private TextView add_an_image_text;
+
     private EditText edit_text_create_event_name;
-    private EditText editTextFromDate;
-    private EditText editTextToDate;
+    private EditText editTextStartDate;
+    private EditText editTextEndDate;
     private EditText editTextStartTime;
     private EditText editTextEndTime;
+
     private ImageButton create_event_image;
+    private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
+    private Event event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +70,10 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_create_event);
 
         progressDialog = new ProgressDialog(this);
+        firebaseAuth = FirebaseAuth.getInstance();
 
-        Calendar newCal = Calendar.getInstance();
+        newCal = Calendar.getInstance();
+        event = new Event();
         Calendar eventCalendar = Calendar.getInstance();
         dateFormatter = new SimpleDateFormat("EEE, MMM d, yyyy", Locale.US);
         timeFormatter = new SimpleDateFormat("h:mm a", Locale.US);
@@ -70,48 +82,69 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
         floatingActionButton = (FloatingActionButton) findViewById(R.id.create_event_fab);
         create_event_input_layout = (TextInputLayout) findViewById(R.id.create_event_input_layout);
         edit_text_create_event_name = (EditText) findViewById(R.id.edit_text_create_event_name);
-        editTextFromDate = (EditText) findViewById(R.id.edit_text_from_date);
-        editTextToDate = (EditText) findViewById(R.id.edit_text_to_date);
+        editTextStartDate = (EditText) findViewById(R.id.edit_text_start_date);
+        editTextEndDate = (EditText) findViewById(R.id.edit_text_end_date);
         editTextStartTime = (EditText) findViewById(R.id.edit_text_start_time);
         editTextEndTime = (EditText) findViewById(R.id.edit_text_end_time);
         add_an_image_text = (TextView) findViewById(R.id.add_an_image_text);
         create_event_image = (ImageButton) findViewById(R.id.create_event_image);
 
-        editTextFromDate.setInputType(InputType.TYPE_CLASS_DATETIME);
-        //editTextFromDate.setText(dateFormatter.format(newCal.getTime().getDate()));
-        editTextToDate.setInputType(InputType.TYPE_CLASS_DATETIME);
-        //editTextToDate.setText(dateFormatter.format(newCal.getTime()));
-
+        editTextStartDate.setInputType(InputType.TYPE_CLASS_DATETIME);
+        editTextEndDate.setInputType(InputType.TYPE_CLASS_DATETIME);
         editTextStartTime.setInputType(InputType.TYPE_CLASS_DATETIME);
-        //editTextStartTime.setText(timeFormatter.format(newCal.getTime()));
         editTextEndTime.setInputType(InputType.TYPE_CLASS_DATETIME);
-        //editTextEndTime.setText(timeFormatter.format(newCal.getTime()));
 
-        floatingActionButton.hasFocus();
+        setOnClickListeners();
 
-        editTextFromDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        setOnFocusListenersOnDateInputs();
+        setOnFocusListenersOnTimeInputs();
+
+        setStartDateInputDialog();
+        setStartTimeInputDialog();
+
+        setEndDateInputDialog();
+        setEndTimeInputDialog();
+
+    }
+
+    private void setOnClickListeners() {
+        create_event_image.setOnClickListener(this);
+        floatingActionButton.setOnClickListener(this);
+    }
+
+    /**
+     * OnFocusListeners check to see when the user has clicked on a view (date input container
+     * or time input container).
+     * When this happens, the date picker input dialog is shown, and it will only show when the
+     * view is in focus.
+     */
+
+    private void setOnFocusListenersOnDateInputs() {
+        editTextStartDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (hasWindowFocus())
-                    datePickerDialogFrom.show();
+                    startDatePickerDialog.show();
                 view.clearFocus();
             }
         });
 
-        editTextToDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editTextEndDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (hasWindowFocus())
-                    datePickerDialogTo.show();
+                    endDatePickerDialog.show();
                 view.clearFocus();
             }
         });
+    }
 
+    private void setOnFocusListenersOnTimeInputs() {
         editTextStartTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (hasWindowFocus())
-                    timePickerDialogStart.show();
+                    startTimePickerDialog.show();
                 view.clearFocus();
             }
         });
@@ -120,60 +153,64 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (hasWindowFocus())
-                    timePickerDialogEnd.show();
+                    endTimePickerDialog.show();
                 view.clearFocus();
             }
         });
+    }
 
-        datePickerDialogFrom = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int day) {
-                Calendar newCalFrom = Calendar.getInstance();
-                newCalFrom.set(year, month, day);
-                editTextFromDate.setText(dateFormatter.format(newCalFrom.getTime()));
-            }
+    private void setStartDateInputDialog() {
+        startDatePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int day) {
+                        newCalFrom = Calendar.getInstance();
+                        newCalFrom.set(year, month, day);
+                        editTextStartDate.setText(dateFormatter.format(newCalFrom.getTime()));
+                    }
 
-        }, newCal.get(Calendar.YEAR), newCal.get(Calendar.MONTH), newCal.get(Calendar.DAY_OF_MONTH));
+                }, newCal.get(Calendar.YEAR), newCal.get(Calendar.MONTH), newCal.get(Calendar.DAY_OF_MONTH));
+    }
 
-        datePickerDialogTo = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int day) {
-                Calendar newCalTo = Calendar.getInstance();
-                newCalTo.set(year, month, day);
-                editTextToDate.setText(dateFormatter.format(newCalTo.getTime()));
-            }
-
-        }, newCal.get(Calendar.YEAR), newCal.get(Calendar.MONTH), newCal.get(Calendar.DAY_OF_MONTH));
-
-        timePickerDialogStart = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+    private void setStartTimeInputDialog() {
+        startTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hour, int minute) {
-                Calendar newTimeStart = Calendar.getInstance();
+                newTimeStart = Calendar.getInstance();
                 newTimeStart.set(Calendar.HOUR_OF_DAY, hour);
                 newTimeStart.set(Calendar.MINUTE, minute);
                 editTextStartTime.setText(timeFormatter.format(newTimeStart.getTime()));
+                event.setEventStartTime(editTextStartTime.getText().toString());
             }
 
         }, newCal.get(Calendar.HOUR_OF_DAY), newCal.get(Calendar.MINUTE), true);
-
-        timePickerDialogEnd = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hour, int minute) {
-                Calendar newTimeStart = Calendar.getInstance();
-                newTimeStart.set(Calendar.HOUR_OF_DAY, hour);
-                newTimeStart.set(Calendar.MINUTE, minute);
-                editTextEndTime.setText(timeFormatter.format(newTimeStart.getTime()));
-            }
-
-        }, newCal.get(Calendar.HOUR_OF_DAY), newCal.get(Calendar.MINUTE), true);
-
-        setOnClickListeners();
-
     }
 
-    private void setOnClickListeners() {
-        create_event_image.setOnClickListener(this);
-        floatingActionButton.setOnClickListener(this);
+    private void setEndDateInputDialog() {
+        endDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                newCalTo = Calendar.getInstance();
+                newCalTo.set(year, month, day);
+                editTextEndDate.setText(dateFormatter.format(newCalTo.getTime()));
+                event.setEventEndDate(editTextEndDate.getText().toString());
+            }
+
+        }, newCal.get(Calendar.YEAR), newCal.get(Calendar.MONTH), newCal.get(Calendar.DAY_OF_MONTH));
+    }
+
+    private void setEndTimeInputDialog() {
+        endTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hour, int minute) {
+                newTimeEnd = Calendar.getInstance();
+                newTimeEnd.set(Calendar.HOUR_OF_DAY, hour);
+                newTimeEnd.set(Calendar.MINUTE, minute);
+                editTextEndTime.setText(timeFormatter.format(newTimeEnd.getTime()));
+                event.setEventEndTime(editTextEndTime.getText().toString());
+            }
+
+        }, newCal.get(Calendar.HOUR_OF_DAY), newCal.get(Calendar.MINUTE), true);
     }
 
     @Override
@@ -185,40 +222,10 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
         }
 
         if (view == floatingActionButton) {
-            //initializeEvent();
-            progressDialog.setMessage("Creating " + edit_text_create_event_name.getText().toString() + "...");
-            progressDialog.show();
-            Event event = new Event(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            event.setEventName(edit_text_create_event_name.getText().toString());
-            if (eventTypeSwitch.isChecked()) {
-                event.setEventType("Public");
-            } else {
-                event.setEventType("Private");
-            }
-
-            event.setEventDescription("Event Description");
-
-            String nodeForAllEvents = "events";
-            FirebaseDatabase eventDb = FirebaseDatabase.getInstance();
-            DatabaseReference eventReference = eventDb.getReference(nodeForAllEvents);
-            progressDialog.setMessage("Creating " + edit_text_create_event_name.getText().toString() + "...");
-            progressDialog.show();
-            String eventKey = eventReference.push().getKey();
-            event.setEventID(eventKey);
-            eventReference.setValue(event.getEventID());
-
-//            String nodeForCurrentUser = "user";
-//            User user = new User();
-//            FirebaseDatabase userDb = FirebaseDatabase.getInstance();
-//            DatabaseReference userReference = userDb.getReference(
-//                    nodeForCurrentUser + '/' + FirebaseAuth.getInstance().getCurrentUser().getUid());
-//            user.attachEventToUser(event.getEventID());
-
-            //userReference.
-            //reference.child(nodeForAllEvents).setValue(event);
+            addEventToDatabase(initializeEvent());
 
             /**
-             * Wait slightly ~ 3 secs before returning user to previous activity
+             * Wait slightly ~ 2 secs before returning user to previous screen
              */
 
             final Handler handler = new Handler();
@@ -226,10 +233,60 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
                 @Override
                 public void run() {
                     progressDialog.dismiss();
+                    //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+                    //getActivity().getSupportFragmentManager().popBackStack();f
                     finish();
                 }
-            }, 3072);
+            }, 2048);
         }
+    }
+
+    private Event initializeEvent() {
+        progressDialog.setMessage("Creating " + edit_text_create_event_name.getText()
+                .toString() + "...");
+        progressDialog.show();
+        event.setEventCreatorID(firebaseAuth.getCurrentUser().getUid());
+        event.setEventName(edit_text_create_event_name.getText().toString());
+        if (eventTypeSwitch.isChecked()) {
+            event.setEventType("Public");
+        } else {
+            event.setEventType("Private");
+        }
+
+        event.setEventDescription("Event Description");
+
+        return event;
+    }
+
+    private void addEventToDatabase(Event event) {
+        String nodeForAllEvents = "dbroot/events";
+        FirebaseDatabase eventDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference eventReference = eventDatabase.getReference(nodeForAllEvents);
+        progressDialog.setMessage("Creating " + edit_text_create_event_name.getText()
+                .toString() + "...");
+        progressDialog.show();
+        String eventKey = eventReference.push().getKey();
+        event.setEventID(eventKey);
+        eventReference.setValue(eventKey);
+        eventReference.child(nodeForAllEvents + '/' + eventKey).setValue(event);
+        addEventToCreatorEventList(event.getEventID());
+    }
+
+    //private void addEventToPhoneCalendar(Event event) { }
+
+    private void addEventToCreatorEventList(String eventID) {
+        //User user = new User();
+
+        String creatorID = firebaseAuth.getCurrentUser().getUid();
+        String nodeForThisUser = "dbroot/users" + '/' + creatorID;
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference(nodeForThisUser
+                + '/' + "userEvents");
+
+        //user = DataSnapshot.getValue(User.class);
+        //databaseReference.orderByChild(String s);
+        databaseReference.setValue(eventID); //TODO use DataSnapshot to acquire actual event object
+        //user.attachEventToUser(eventID);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

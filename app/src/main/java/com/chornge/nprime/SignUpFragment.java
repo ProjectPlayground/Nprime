@@ -24,7 +24,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -41,7 +40,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     TextInputLayout password_sign_up;
 
     private FirebaseAuth firebaseAuth;
-    private FirebaseUser firebaseUser;
     private ProgressDialog progressDialog;
 
     public SignUpFragment() {
@@ -56,6 +54,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(getActivity());
+
         Typeface robotoRegular = Typeface.createFromAsset(getActivity().getAssets(),
                 "font/Roboto-Regular.ttf");
         Typeface robotoBlack = Typeface.createFromAsset(getActivity().getAssets(),
@@ -153,7 +152,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressDialog.dismiss();
                         if (task.isSuccessful()) {
-                            initializeUser();
                             signInUser();
                         } else {
                             Toast.makeText(getActivity().getApplicationContext(),
@@ -170,9 +168,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         progressDialog.dismiss();
                                         if (task.isSuccessful()) {
-                                            startActivity(new Intent(getActivity().getApplication(),
-                                                    UserLayoutActivity.class));
-                                            //
+                                            setUpUser();
                                         } else {
                                             Toast.makeText(getActivity().getApplicationContext(),
                                                     "Login Failed", Toast.LENGTH_SHORT).show();
@@ -181,16 +177,24 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                 });
                     }
 
-                    private void initializeUser() {
+                    private void setUpUser() {
                         User user = new User(sign_up_fullname, sign_up_email);
                         saveUserToDatabase(user);
+                        passUserData(user);
+                    }
+
+                    private void passUserData(User user) {
+                        Intent intent = new Intent(getActivity(), UserLayoutActivity.class);
+                        intent.putExtra("userData", user);
+                        startActivity(intent);
                     }
 
                     private void saveUserToDatabase(User user) {
-                        String nodeForAllUsers = "users";
+                        String nodeForAllUsers = "dbroot/users";
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference reference = database.getReference(nodeForAllUsers);
-                        String userKey = reference.push().getKey();
+
+                        String userKey = firebaseAuth.getCurrentUser().getUid();
                         user.setUserID(userKey);
                         reference.setValue(userKey);
                         reference.child(user.getUserID()).setValue(user);

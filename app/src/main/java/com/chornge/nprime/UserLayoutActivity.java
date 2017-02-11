@@ -10,14 +10,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class UserLayoutActivity extends AppCompatActivity {
 
-    private User userObject;
     private FirebaseAuth firebaseAuth;
-
-    public static UserLayoutActivity newInstance(User u) {
-        UserLayoutActivity userLayoutActivity = new UserLayoutActivity();
-        userLayoutActivity.userObject = u;
-        return userLayoutActivity;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +22,21 @@ public class UserLayoutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tab_view);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.getCurrentUser().getUid();
+
+        /**
+         * get user object passed when activity is created
+         */
+        Bundle bundleToReceive = getIntent().getExtras();
+        User userObject = bundleToReceive.getParcelable("userData");
+
+        /**
+         * pass received user object to user profile fragment
+         */
+        Bundle bundleToPass = new Bundle();
+        bundleToPass.putParcelable("userProfileData", userObject);
+        UserProfileFragment.newInstance(userObject);
+        //
 
         TabLayout mTabLayout;
         final ViewPager mViewPager;

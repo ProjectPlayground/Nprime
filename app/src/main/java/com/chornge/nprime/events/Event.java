@@ -2,19 +2,18 @@ package com.chornge.nprime.events;
 
 import android.widget.ImageButton;
 
-import com.chornge.nprime.users.User;
-
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Event { //implements AttendeesInterface {
     private String eventName;
-    private Calendar eventStart;
-    private Calendar eventEnd;
+    private String eventStartDate;
+    private String eventEndDate;
+    private String eventStartTime;
+    private String eventEndTime;
     private String eventDescription = " ";
     private List<Message> messages = new LinkedList<>();
-    private List<User> guestList = new LinkedList<>();
+    private List<String> guestList = new LinkedList<>();
     private String eventCreatorID;
     private String eventID;
     private String eventType;
@@ -25,6 +24,11 @@ public class Event { //implements AttendeesInterface {
     }
 
     public Event(String eventCreatorID) {
+        this.eventCreatorID = eventCreatorID;
+        guestList.add(eventCreatorID);
+    }
+
+    public void setEventCreatorID(String eventCreatorID) {
         this.eventCreatorID = eventCreatorID;
     }
 
@@ -56,6 +60,38 @@ public class Event { //implements AttendeesInterface {
         this.eventDescription = newEventDescription;
     }
 
+    public String getEventEndDate() {
+        return eventEndDate;
+    }
+
+    public void setEventEndDate(String eventEndDate) {
+        this.eventEndDate = eventEndDate;
+    }
+
+    public String getEventEndTime() {
+        return eventEndTime;
+    }
+
+    public void setEventEndTime(String eventEndTime) {
+        this.eventEndTime = eventEndTime;
+    }
+
+    public String getEventStartDate() {
+        return eventStartDate;
+    }
+
+    public void setEventStartDate(String eventStartDate) {
+        this.eventStartDate = eventStartDate;
+    }
+
+    public String getEventStartTime() {
+        return eventStartTime;
+    }
+
+    public void setEventStartTime(String eventStartTime) {
+        this.eventStartTime = eventStartTime;
+    }
+
     public List<Message> getMessages() {
         return messages;
     }
@@ -76,23 +112,7 @@ public class Event { //implements AttendeesInterface {
         this.eventLogo = newEventLogo;
     }
 
-    public Calendar getEventEnd() {
-        return eventEnd;
-    }
-
-    public void setEventEnd(Calendar eventEnd) {
-        this.eventEnd = eventEnd;
-    }
-
-    public Calendar getEventStart() {
-        return eventStart;
-    }
-
-    public void setEventStart(Calendar eventStart) {
-        this.eventStart = eventStart;
-    }
-
-    public List<User> getGuests() {
+    public List<String> getGuests() {
         return guestList;
     }
 }

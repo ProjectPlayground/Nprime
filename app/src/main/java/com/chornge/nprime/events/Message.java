@@ -4,7 +4,7 @@ package com.chornge.nprime.events;
  * Comments and posts in Events will be instances of this Message class
  */
 public class Message {
-    private String nameOfUser;
+    private String author;
     private String comment;
     private String timeStamp;
 
@@ -28,11 +28,11 @@ public class Message {
         this.comment = comment;
     }
 
-    public String getNameOfUser() {
-        return nameOfUser;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setNameOfUser(String nameOfUser) {
-        this.nameOfUser = nameOfUser;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

@@ -35,8 +35,8 @@ public class UserLayoutActivity extends AppCompatActivity {
          */
         Bundle bundleToPass = new Bundle();
         bundleToPass.putParcelable("userProfileData", userObject);
-        UserProfileFragment.newInstance(userObject);
-        //
+        //UserProfileFragment.newInstance(userObject);
+
 
         TabLayout mTabLayout;
         final ViewPager mViewPager;

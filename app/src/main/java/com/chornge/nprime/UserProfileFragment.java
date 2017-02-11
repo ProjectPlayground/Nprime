@@ -32,6 +32,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
@@ -48,7 +53,7 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
     FirebaseAuth firebaseAuth;
     TextView location_text;
 
-    User userObject;
+    private User userObject;
 
     private DatePickerDialog datePickerDialog;
     private ImageButton calendar_event_button;
@@ -58,13 +63,13 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
 
     }
 
-    public static UserProfileFragment newInstance(User user) {
-        UserProfileFragment fragment = new UserProfileFragment();
-        Bundle userBundle = new Bundle();
-        userBundle.putParcelable("userProfileData", user);
-        fragment.setArguments(userBundle);
-        return fragment;
-    }
+//    public static UserProfileFragment newInstance(User user) {
+//        UserProfileFragment fragment = new UserProfileFragment();
+//        Bundle userBundle = new Bundle();
+//        userBundle.putParcelable("userProfileData", user);
+//        fragment.setArguments(userBundle);
+//        return fragment;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,7 +79,6 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         mapFragment.getMapAsync(this);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.mapContainer, mapFragment).commit();
-        //setRetainInstance(true);
     }
 
     protected void requestPermission(String permissionType, int
@@ -109,7 +113,7 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         //inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
-        //setRetainInstance(true);
+        setRetainInstance(true);
 
         ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
                 .hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -117,9 +121,21 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         firebaseAuth = FirebaseAuth.getInstance();
 
         userObject = new User();
-        //userObject = getArguments().getParcelable("userProfileData");
-        //userObject.getUserID();
-        //
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        String node = "dbroot/users" + '/' + firebaseAuth.getCurrentUser().getUid();
+        DatabaseReference databaseReference = firebaseDatabase.getReference(node);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                userObject = (User) dataSnapshot.getValue();
+                userObject.getFullName();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         TextView userProfileName = (TextView) view.findViewById(R.id.user_profile_name);
         //userProfileName.setText(userObject.getFullName());

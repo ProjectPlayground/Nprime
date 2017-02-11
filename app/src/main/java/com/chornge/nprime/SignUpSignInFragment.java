@@ -49,7 +49,7 @@ public class SignUpSignInFragment extends Fragment implements View.OnClickListen
         bSignIn = (Button) view.findViewById(R.id.bSignIn);
         bSignIn.setTypeface(robotoLight);
 
-        app_name_text_view_prime = (TextView) view.findViewById(R.id.app_name_text_view_prime);
+        app_name_text_view_prime = (TextView) view.findViewById(R.id.text_view_prime);
         app_name_text_view_prime.setTypeface(robotoLightItalic);
         app_name_text_view_prime.setTextColor(0xFFE9AD07);
 

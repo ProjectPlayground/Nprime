@@ -24,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.hide();
         }
-        int SPLASH_DISPLAY_LENGTH = 2000;
+        int SPLASH_DISPLAY_LENGTH = 2048; //~ 2 seconds
 
         new Handler().postDelayed(new Runnable() {
             @Override

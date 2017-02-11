@@ -45,10 +45,10 @@ public class UserLayoutActivity extends AppCompatActivity {
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
 
-        mTabLayout.addTab(mTabLayout.newTab().setIcon(R.drawable.profile_icon));
-        mTabLayout.addTab(mTabLayout.newTab().setIcon(R.drawable.chat_icon));
-        mTabLayout.addTab(mTabLayout.newTab().setIcon(R.drawable.search_icon));
-        mTabLayout.addTab(mTabLayout.newTab().setIcon(R.drawable.event_icon));
+        mTabLayout.addTab(mTabLayout.newTab().setIcon(R.drawable.profile_icon_gold));
+        mTabLayout.addTab(mTabLayout.newTab().setIcon(R.drawable.mail_gold));
+        mTabLayout.addTab(mTabLayout.newTab().setIcon(R.drawable.search_gold));
+        mTabLayout.addTab(mTabLayout.newTab().setIcon(R.drawable.event_gold));
 
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager(), mTabLayout.getTabCount());
         mViewPager.setAdapter(mPagerAdapter);

@@ -65,31 +65,34 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setUpViewObjects(View view) {
-        sign_up_button = (Button) view.findViewById(R.id.sign_up_button);
-        sign_up_button.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),
-                "font/Roboto-Black.ttf"));
         user_registration_text = (TextView) view.findViewById(R.id.user_registration_text);
-        user_registration_text.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),
-                "font/Roboto-Black.ttf"));
+        user_registration_text.setTypeface(useRobotoBlackFontStyle());
+        sign_up_button = (Button) view.findViewById(R.id.sign_up_button);
+        sign_up_button.setTypeface(useRobotoBlackFontStyle());
 
         already_a_user = (TextView) view.findViewById(R.id.already_a_user);
-        already_a_user.setTypeface(setRobotoRegularFontStyle());
+        already_a_user.setTypeface(useRobotoRegularFontStyle());
         full_name_sign_up = (TextInputLayout) view.findViewById(R.id.full_name_sign_up);
-        full_name_sign_up.setTypeface(setRobotoRegularFontStyle());
+        full_name_sign_up.setTypeface(useRobotoRegularFontStyle());
         email_address_sign_up = (TextInputLayout) view.findViewById(R.id.email_address_sign_up);
-        email_address_sign_up.setTypeface(setRobotoRegularFontStyle());
+        email_address_sign_up.setTypeface(useRobotoRegularFontStyle());
         password_sign_up = (TextInputLayout) view.findViewById(R.id.password_sign_up);
-        password_sign_up.setTypeface(setRobotoRegularFontStyle());
+        password_sign_up.setTypeface(useRobotoRegularFontStyle());
 
         edit_text_full_name_sign_up = (EditText) view.findViewById(R.id.edit_text_full_name_sign_up);
-        edit_text_full_name_sign_up.setTypeface(setRobotoRegularFontStyle());
+        edit_text_full_name_sign_up.setTypeface(useRobotoRegularFontStyle());
         edit_text_email_sign_up = (EditText) view.findViewById(R.id.edit_text_email_sign_up);
-        edit_text_email_sign_up.setTypeface(setRobotoRegularFontStyle());
+        edit_text_email_sign_up.setTypeface(useRobotoRegularFontStyle());
         edit_text_password_sign_up = (EditText) view.findViewById(R.id.edit_text_password_sign_up);
-        edit_text_password_sign_up.setTypeface(setRobotoRegularFontStyle());
+        edit_text_password_sign_up.setTypeface(useRobotoRegularFontStyle());
     }
 
-    private Typeface setRobotoRegularFontStyle() {
+    private Typeface useRobotoBlackFontStyle() {
+        return Typeface.createFromAsset(getActivity().getAssets(),
+                "font/Roboto-Black.ttf");
+    }
+
+    private Typeface useRobotoRegularFontStyle() {
         return Typeface.createFromAsset(getActivity().getAssets(),
                 "font/Roboto-Regular.ttf");
     }
@@ -217,7 +220,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference(nodeForAllUsers);
 
-        //noinspection ConstantConditions - To prevent NullPointer on .getUiD()
+        //noinspection ConstantConditions - To prevent NullPointerExcp on .getUiD()
         String userKey = firebaseAuth.getCurrentUser().getUid();
         user.setUserID(userKey);
         reference.setValue(userKey);
@@ -233,7 +236,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        edit_text_full_name_sign_up.hasFocus();
         edit_text_full_name_sign_up.setText("");
         edit_text_email_sign_up.setText("");
         edit_text_password_sign_up.setText("");

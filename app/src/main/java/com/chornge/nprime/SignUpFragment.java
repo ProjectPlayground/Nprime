@@ -224,7 +224,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         String userKey = firebaseAuth.getCurrentUser().getUid();
         user.setUserID(userKey);
         reference.setValue(userKey);
-        reference.child(user.getUserID()).setValue(user);
+        reference.child(nodeForAllUsers).child(userKey).setValue(user);
     }
 
     private void passUserData(User user) {

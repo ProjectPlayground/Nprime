@@ -32,11 +32,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
@@ -45,13 +40,16 @@ import static android.app.Activity.RESULT_OK;
 public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         View.OnClickListener, Runnable {
 
-    public static final int RESULT_GALLERY = 0;
-    private static final String KEY_NAME = "key_name";
+//    public static final int RESULT_GALLERY = 0;
+//    private static final String KEY_NAME = "key_name";
+
     private static final int SELECT_PICTURE = 1;
     boolean isTabLoaded = false;
     ImageButton userProfilePhoto;
     FirebaseAuth firebaseAuth;
     TextView location_text;
+    TextView followings_text;
+    TextView followers_text;
 
     private User userObject;
 
@@ -120,27 +118,26 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        userObject = new User();
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        String node = "dbroot/users" + '/' + firebaseAuth.getCurrentUser().getUid();
-        DatabaseReference databaseReference = firebaseDatabase.getReference(node);
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                userObject = (User) dataSnapshot.getValue();
-                userObject.getFullName();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        /**
+         * receive userObject
+         */
+        userObject = ((UserLayoutActivity) getActivity()).getUserObject();
 
         TextView userProfileName = (TextView) view.findViewById(R.id.user_profile_name);
-        //userProfileName.setText(userObject.getFullName());
+        if (userObject.getFullName() != null) {
+            userProfileName.setText(userObject.getFullName());
+            userProfileName.setTextColor(Color.BLACK);
+        } else {
+            userProfileName.setVisibility(View.INVISIBLE);
+        }
 
-        userProfileName.setTextColor(Color.BLACK);
+        followers_text = (TextView) view.findViewById(R.id.followers_text);
+        String numberOfFollowers = userObject.getFollowers().size() + " Followers";
+        followers_text.setText(numberOfFollowers);
+
+        followings_text = (TextView) view.findViewById(R.id.followings_text);
+        String numberOfFollowings = userObject.getFollowers().size() + " Followings";
+        followings_text.setText(numberOfFollowings);
 
         location_text = (TextView) view.findViewById(R.id.location_text);
         location_text.setOnClickListener(this);

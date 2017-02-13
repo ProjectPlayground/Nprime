@@ -25,6 +25,7 @@ public class User implements Parcelable { //implements NetworkingInterface {
     private String userID;
     private List<String> userEvents = new LinkedList<>();
     private List<String> followers = new LinkedList<>();
+    private List<String> followings = new LinkedList<>();
 
     /**
      * look into ThreadLocal
@@ -56,6 +57,10 @@ public class User implements Parcelable { //implements NetworkingInterface {
 
     public List<String> getFollowers() {
         return followers;
+    }
+
+    public List<String> getFollowings() {
+        return followings;
     }
 
     public String getUserID() {

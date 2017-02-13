@@ -34,9 +34,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_gravity="center"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center_horizontal"
-                    android:textSize="18sp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -46,19 +46,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="16dp"
                     android:gravity="center"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
-
-                <ImageButton
-                    android:id="@+id/user_profile_photo"
-                    android:layout_width="96dp"
-                    android:layout_height="88dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/profile_pic"
-                    android:contentDescription="@string/content_desc_user_profile_img"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/profile_pic" />
 
                 <ImageButton
                     android:id="@+id/calendar_event_button"
@@ -83,7 +72,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="8dp"
-                        android:text="310 Following"
+                        android:text="Following"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -91,11 +80,22 @@
                         android:id="@+id/followers_text"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="568 Followers"
+                        android:text="Followers"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/user_profile_photo"
+                    android:layout_width="96dp"
+                    android:layout_height="88dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/profile_pic"
+                    android:contentDescription="@string/content_desc_user_profile_img"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/profile_pic" />
 
             </RelativeLayout>
 

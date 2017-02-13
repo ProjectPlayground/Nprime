@@ -257,7 +257,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void addEventToDatabase(Event event) {
-        String nodeForAllEvents = "dbroot/events";
+        String nodeForAllEvents = "dbroot";
         FirebaseDatabase eventDatabase = FirebaseDatabase.getInstance();
         DatabaseReference eventReference = eventDatabase.getReference(nodeForAllEvents);
         progressDialog.setMessage("Creating " + edit_text_create_event_name.getText()
@@ -265,8 +265,8 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
         progressDialog.show();
         String eventKey = eventReference.push().getKey();
         event.setEventID(eventKey);
-        eventReference.setValue(eventKey);
-        eventReference.child(nodeForAllEvents).child(eventKey).setValue(event);
+        eventReference.child("events").setValue(eventKey);
+        eventReference.child(nodeForAllEvents).child("events").child(eventKey).setValue(event);
         addEventToCreatorEventList(eventKey);
     }
 
@@ -276,10 +276,10 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
         //User user = new User();
 
         String creatorID = firebaseAuth.getCurrentUser().getUid();
-        String nodeForCreator = "dbroot/users";
+        String nodeForCreator = "dbroot";
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = firebaseDatabase.getReference(nodeForCreator);
-        databaseReference.child(nodeForCreator).child(creatorID).child("userEvents").setValue(eventID);
+        databaseReference.child("users").child(creatorID).child("userEvents").setValue(eventID);
 
         //user = DataSnapshot.getValue(User.class);
         //databaseReference.orderByChild(String s);

@@ -216,7 +216,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     }
 
     private void saveUserToDatabase(User user) {
-        String nodeForAllUsers = "dbroot/users";
+        String nodeForAllUsers = "dbroot";
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference(nodeForAllUsers);
 
@@ -224,12 +224,12 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         String userKey = firebaseAuth.getCurrentUser().getUid();
         user.setUserID(userKey);
         reference.setValue(userKey);
-        reference.child(nodeForAllUsers).child(userKey).setValue(user);
+        reference.child("users").child(userKey).setValue(user);
     }
 
     private void passUserData(User user) {
         Intent intent = new Intent(getActivity(), UserLayoutActivity.class);
-        intent.putExtra("userData", user);
+        intent.putExtra("userBundleKey", user);
         startActivity(intent);
     }
 

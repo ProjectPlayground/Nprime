@@ -216,15 +216,14 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     }
 
     private void saveUserToDatabase(User user) {
-        String nodeForAllUsers = "dbroot";
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference reference = database.getReference(nodeForAllUsers);
-
         //noinspection ConstantConditions - To prevent NullPointerExcp on .getUiD()
         String userKey = firebaseAuth.getCurrentUser().getUid();
         user.setUserID(userKey);
-        reference.setValue(userKey);
-        reference.child("users").child(userKey).setValue(user);
+
+        String nodeForAllUsers = "users";
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference(nodeForAllUsers + '/' + userKey);
+        reference.setValue(user);
     }
 
     private void passUserData(User user) {

@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f1ae1f"
+    android:background="#FF424242"
     android:padding="4dp">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/activity_tab_view_height"
         android:background="#FF424242"
         android:paddingBottom="32dp"
         android:scrollbars="none">
@@ -133,7 +134,7 @@
             <LinearLayout
                 android:id="@+id/mapContainer"
                 android:layout_width="match_parent"
-                android:layout_height="152dp"
+                android:layout_height="240dp"
                 android:layout_marginTop="4dp"
                 android:background="#6e6d6d"
                 android:orientation="horizontal" />

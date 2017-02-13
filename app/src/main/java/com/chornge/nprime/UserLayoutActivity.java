@@ -11,32 +11,22 @@ import com.google.firebase.auth.FirebaseAuth;
 public class UserLayoutActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
+    private User userObject;
+
+    public User getUserObject() {
+        return userObject;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        if (savedInstanceState != null) {
-//            getSupportFragmentManager().getFragment(savedInstanceState, "key");
-//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_view);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.getCurrentUser().getUid();
 
-        /**
-         * get user object passed when activity is created
-         */
-        Bundle bundleToReceive = getIntent().getExtras();
-        User userObject = bundleToReceive.getParcelable("userData");
-
-        /**
-         * pass received user object to user profile fragment
-         */
-        Bundle bundleToPass = new Bundle();
-        bundleToPass.putParcelable("userProfileData", userObject);
-        //UserProfileFragment.newInstance(userObject);
-
+        Bundle getUserObjectInBundle = getIntent().getExtras();
+        userObject = getUserObjectInBundle.getParcelable("userBundleKey");
 
         TabLayout mTabLayout;
         final ViewPager mViewPager;
@@ -74,24 +64,9 @@ public class UserLayoutActivity extends AppCompatActivity {
         });
     }
 
-//    @Override
-//    protected void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//
-//        //save fragment's instance
-//        getSupportFragmentManager().putFragment(outState, "key", fragment);
-//    }
-
     @Override
     public void onStop() {
         super.onStop();
         firebaseAuth.signOut();
     }
 }
-
-//    private void setToolbar() {
-//        toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        if (toolbar != null) {
-//            setSupportActionBar(toolbar);
-//        }
-//    }

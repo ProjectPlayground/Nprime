@@ -114,16 +114,20 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if (view == already_a_user) {
-            SignInFragment signInFragment = new SignInFragment();
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.welcome_layout_screen, signInFragment, signInFragment.getTag())
-                    .commit();
+            switchToSignInScreen();
         }
 
         if (view == sign_up_button) {
             getUserDetails();
         }
+    }
+
+    private void switchToSignInScreen() {
+        SignInFragment signInFragment = new SignInFragment();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.welcome_layout_screen, signInFragment, signInFragment.getTag())
+                .commit();
     }
 
     public void getUserDetails() {

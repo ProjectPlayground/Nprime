@@ -59,28 +59,48 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(getActivity());
-        Typeface robotoRegular = Typeface.createFromAsset(getActivity().getAssets(),
-                "font/Roboto-Regular.ttf");
-        Typeface robotoBlack = Typeface.createFromAsset(getActivity().getAssets(),
-                "font/Roboto-Black.ttf");
 
+        setUpViewObjects(view);
+        setTypeFaces();
+        setUpAnimations();
+
+        sign_in_button.setOnClickListener(this);
+        forgot_password.setOnClickListener(this);
+
+        return view;
+    }
+
+    private void setUpViewObjects(View view) {
         sign_in_button = (Button) view.findViewById(R.id.sign_in_button);
-        sign_in_button.setTypeface(robotoBlack);
         user_login_text = (TextView) view.findViewById(R.id.user_login_text);
-        user_login_text.setTypeface(robotoBlack);
         forgot_password = (TextView) view.findViewById(R.id.forgot_password);
-        forgot_password.setTypeface(robotoRegular);
-
         email_address_login = (TextInputLayout) view.findViewById(R.id.email_address_login);
-        email_address_login.setTypeface(robotoRegular);
         password_login = (TextInputLayout) view.findViewById(R.id.password_login);
-        password_login.setTypeface(robotoRegular);
-
         edit_text_email_login = (EditText) view.findViewById(R.id.edit_text_email_login);
-        edit_text_email_login.setTypeface(robotoRegular);
         edit_text_password_login = (EditText) view.findViewById(R.id.edit_text_password_login);
-        edit_text_password_login.setTypeface(robotoRegular);
+    }
 
+    private void setTypeFaces() {
+        sign_in_button.setTypeface(useRobotoBlackFontStyle());
+        user_login_text.setTypeface(useRobotoBlackFontStyle());
+        forgot_password.setTypeface(useRobotoRegularFontStyle());
+        email_address_login.setTypeface(useRobotoRegularFontStyle());
+        password_login.setTypeface(useRobotoRegularFontStyle());
+        edit_text_email_login.setTypeface(useRobotoRegularFontStyle());
+        edit_text_password_login.setTypeface(useRobotoRegularFontStyle());
+    }
+
+    private Typeface useRobotoBlackFontStyle() {
+        return Typeface.createFromAsset(getActivity().getAssets(),
+                "font/Roboto-Black.ttf");
+    }
+
+    private Typeface useRobotoRegularFontStyle() {
+        return Typeface.createFromAsset(getActivity().getAssets(),
+                "font/Roboto-Regular.ttf");
+    }
+
+    private void setUpAnimations() {
         final Animation translateFromTop = AnimationUtils.loadAnimation(
                 getActivity().getApplicationContext(), R.anim.translate_from_top);
         final Animation translateFromBottom = AnimationUtils.loadAnimation(
@@ -91,11 +111,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         password_login.setAnimation(translateFromTop);
         sign_in_button.setAnimation(translateFromBottom);
         forgot_password.setAnimation(translateFromBottom);
-
-        sign_in_button.setOnClickListener(this);
-        forgot_password.setOnClickListener(this);
-
-        return view;
     }
 
     @Override
@@ -112,18 +127,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     private void getUserDetails() {
         final String sign_in_email = edit_text_email_login.getText().toString().trim();
         String sign_in_password = edit_text_password_login.getText().toString().trim();
-
-        if (TextUtils.isEmpty(sign_in_email)) {
-            Toast.makeText(getActivity().getApplicationContext(), "Invalid Email",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (TextUtils.isEmpty(sign_in_password)) {
-            Toast.makeText(getActivity().getApplicationContext(), "Password must be 6 letters or more",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
+        checkUserEmail(sign_in_email);
+        checkUserPassword(sign_in_password);
 
         progressDialog.setMessage("Logging In User...");
         progressDialog.show();
@@ -138,23 +143,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             //noinspection ConstantConditions - To prevent NullPointerExcp on .getUiD()
                             DatabaseReference reference = database.getReference(nodeForUser);
-
-//                            reference.addValueEventListener(new ValueEventListener() {
-//                                @Override
-//                                public void onDataChange(DataSnapshot dataSnapshot) {
-//                                    for (DataSnapshot userSnapShot : dataSnapshot.getChildren()) {
-//                                        //noinspection ConstantConditions - To prevent NullPointer on .getUid()
-//                                        if (userSnapShot.getKey().equals(firebaseAuth.getCurrentUser().getUid()))
-//                                            userSignInObject = userSnapShot.getValue(User.class);
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onCancelled(DatabaseError databaseError) {
-//
-//                                }
-//                            });
-
                             reference.addChildEventListener(new ChildEventListener() {
                                 @Override
                                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -185,7 +173,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                             });
 
                             /**
-                             * Wait slightly ~ 20 secs before returning user to previous screen
+                             * Wait slightly ~ 2 secs before sending user to next screen
                              */
 
                             final Handler handler = new Handler();
@@ -199,8 +187,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                                 }
                             }, 2048);
 
-//                            startActivity(new Intent(getActivity().getApplication(),
-//                                    UserLayoutActivity.class));
                         } else {
                             numberOfFailedLogins++;
                             if (numberOfFailedLogins % 4 == 0) {
@@ -217,15 +203,31 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                 });
     }
 
-    private void forgotPassword() {
-        String emailForReset = edit_text_email_login.getText().toString().trim();
-
-        if (TextUtils.isEmpty(emailForReset)) {
+    private void checkUserEmail(String sign_in_email) {
+        if (TextUtils.isEmpty(sign_in_email)) {
             Toast.makeText(getActivity().getApplicationContext(),
-                    "Check that email is not empty", Toast.LENGTH_SHORT).show();
+                    "Invalid Email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
+
+    private void checkUserPassword(String sign_in_password) {
+        if (TextUtils.isEmpty(sign_in_password)) {
+            Toast.makeText(getActivity().getApplicationContext(),
+                    "Invalid Password", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        if (sign_in_password.length() < 6) {
+            Toast.makeText(getActivity().getApplicationContext(),
+                    "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
+
+    private void forgotPassword() {
+        String emailForReset = edit_text_email_login.getText().toString().trim();
+        checkUserEmail(emailForReset);
         firebaseAuth.sendPasswordResetEmail(emailForReset);
         Snackbar.make(getActivity().findViewById(R.id.user_login_container),
                 "Password Reset Email Sent to " + emailForReset, Snackbar.LENGTH_LONG).show();

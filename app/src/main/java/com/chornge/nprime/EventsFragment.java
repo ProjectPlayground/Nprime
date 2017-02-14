@@ -21,6 +21,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+
 public class EventsFragment extends Fragment implements View.OnClickListener,
         FragmentCompat.OnRequestPermissionsResultCallback {
 
@@ -59,6 +66,23 @@ public class EventsFragment extends Fragment implements View.OnClickListener,
         View view = inflater.inflate(R.layout.fragment_events, container, false);
         setRetainInstance(true);
         setUpViewObjects(view);
+
+        //urlPath = address of your picture on internet
+        String urlPath = "http://http://namchouston.org/feed";
+        URL url = null;
+        try {
+            url = new URL(urlPath);
+            URLConnection connection = url.openConnection();
+            InputStream inputStream = connection.getInputStream();
+            InputStreamReader streamReader = new InputStreamReader(inputStream);
+            BufferedReader reader = new BufferedReader(streamReader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+//        BufferedImage c = ImageIO.read(url);
+//        ImageIcon image = new ImageIcon(c);
+//        jXImageView1.setImage(image);
 
         plus.setOnClickListener(this);
         cameraButton.setOnClickListener(this);

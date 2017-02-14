@@ -14,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -21,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.chornge.nprime.events.Event;
 import com.google.firebase.auth.FirebaseAuth;
@@ -96,8 +98,8 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
 
         setOnClickListeners();
 
-        setOnFocusListenersOnDateInputs();
-        setOnFocusListenersOnTimeInputs();
+        //setOnFocusListenersOnDateInputs();
+        //setOnFocusListenersOnTimeInputs();
 
         setStartDateInputDialog();
         setStartTimeInputDialog();
@@ -123,7 +125,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
         editTextStartDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (hasWindowFocus())
+                if (view.hasWindowFocus())
                     startDatePickerDialog.show();
                 view.clearFocus();
             }
@@ -132,7 +134,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
         editTextEndDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (hasWindowFocus())
+                if (view.hasWindowFocus())
                     endDatePickerDialog.show();
                 view.clearFocus();
             }
@@ -143,7 +145,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
         editTextStartTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (hasWindowFocus())
+                if (view.hasWindowFocus())
                     startTimePickerDialog.show();
                 view.clearFocus();
             }
@@ -152,7 +154,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
         editTextEndTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (hasWindowFocus())
+                if (view.hasWindowFocus())
                     endTimePickerDialog.show();
                 view.clearFocus();
             }
@@ -243,8 +245,10 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
         progressDialog.setMessage("Creating " + edit_text_create_event_name.getText()
                 .toString() + "...");
         progressDialog.show();
-        event.setEventCreatorID(firebaseAuth.getCurrentUser().getUid());
-        event.setEventName(edit_text_create_event_name.getText().toString());
+        event.setEventCreatorID("2FWgXeYsjofYPxvi8i2Rq7W3CBn1"); //event.setEventCreatorID(firebaseAuth.getCurrentUser().getUid());
+        //event.setEventName(edit_text_create_event_name.getText().toString());
+        event.setEventName("TestEvent");
+
         if (eventTypeSwitch.isChecked()) {
             event.setEventType("Public");
         } else {
@@ -260,15 +264,18 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
         String nodeForAllEvents = "events";
         FirebaseDatabase eventDatabase = FirebaseDatabase.getInstance();
         DatabaseReference eventReference = eventDatabase.getReference(nodeForAllEvents);
+        String eventKey = eventReference.push().getKey();
+        event.setEventID(eventKey);
+        if (TextUtils.isEmpty(edit_text_create_event_name.getText())) {
+            Toast.makeText(this, "Invalid Password", Toast.LENGTH_SHORT).show();
+        }
         progressDialog.setMessage("Creating " + edit_text_create_event_name.getText()
                 .toString() + "...");
         progressDialog.show();
-        String eventKey = eventReference.push().getKey();
-        event.setEventID(eventKey);
         eventReference.setValue(eventKey);
         eventReference.child(eventKey).push();
         eventReference.setValue(event);
-        addEventToCreatorEventList(eventKey);
+        //addEventToCreatorEventList(eventKey);
     }
 
     //private void addEventToPhoneCalendar(Event event) { }
@@ -276,7 +283,9 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
     private void addEventToCreatorEventList(String eventID) {
         //User user = new User();
 
-        String creatorID = firebaseAuth.getCurrentUser().getUid();
+        //String creatorID = firebaseAuth.getCurrentUser().getUid();
+        //String creatorID = ((UserLayoutActivity)this).getUserObject();
+        String creatorID = "2FWgXeYsjofYPxvi8i2Rq7W3CBn1";
         String nodeForCreator = "users";
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = firebaseDatabase.getReference(
@@ -284,6 +293,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnCli
         //databaseReference.child("userEvents").setValue(eventID);
         databaseReference.child("userEvents").push();
         databaseReference.setValue(eventID);
+
 
         //user = DataSnapshot.getValue(User.class);
         //databaseReference.orderByChild(String s);

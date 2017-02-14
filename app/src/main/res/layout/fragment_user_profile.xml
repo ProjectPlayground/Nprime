@@ -3,15 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FF424242"
-    android:padding="4dp">
+    android:background="#FF424342"
+    android:paddingEnd="1dp"
+    android:paddingStart="1dp"
+    android:paddingTop="2dp">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/activity_tab_view_height"
         android:background="#FF424242"
-        android:paddingBottom="32dp"
         android:scrollbars="none">
 
         <LinearLayout

@@ -216,7 +216,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     }
 
     private void saveUserToDatabase(User user) {
-        //noinspection ConstantConditions - To prevent NullPointerExcp on .getUiD()
+        //noinspection ConstantConditions - To prevent NullPointer on .getUiD()
         String userKey = firebaseAuth.getCurrentUser().getUid();
         user.setUserID(userKey);
 

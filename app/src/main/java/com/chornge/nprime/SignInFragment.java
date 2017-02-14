@@ -4,11 +4,13 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +21,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chornge.nprime.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignInFragment extends Fragment implements View.OnClickListener {
 
@@ -37,6 +45,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     TextInputLayout password_login;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
+    private User userSignInObject;
 
     public SignInFragment() {
         // Required empty public constructor
@@ -92,7 +101,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if (view == sign_in_button) {
-            signInUser();
+            getUserDetails();
         }
 
         if (view == forgot_password) {
@@ -100,7 +109,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void signInUser() {
+    private void getUserDetails() {
         final String sign_in_email = edit_text_email_login.getText().toString().trim();
         String sign_in_password = edit_text_password_login.getText().toString().trim();
 
@@ -125,11 +134,75 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressDialog.dismiss();
                         if (task.isSuccessful()) {
-                            startActivity(new Intent(getActivity().getApplication(),
-                                    UserLayoutActivity.class));
+                            String nodeForUser = "users";
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            //noinspection ConstantConditions - To prevent NullPointerExcp on .getUiD()
+                            DatabaseReference reference = database.getReference(nodeForUser);
+
+//                            reference.addValueEventListener(new ValueEventListener() {
+//                                @Override
+//                                public void onDataChange(DataSnapshot dataSnapshot) {
+//                                    for (DataSnapshot userSnapShot : dataSnapshot.getChildren()) {
+//                                        //noinspection ConstantConditions - To prevent NullPointer on .getUid()
+//                                        if (userSnapShot.getKey().equals(firebaseAuth.getCurrentUser().getUid()))
+//                                            userSignInObject = userSnapShot.getValue(User.class);
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onCancelled(DatabaseError databaseError) {
+//
+//                                }
+//                            });
+
+                            reference.addChildEventListener(new ChildEventListener() {
+                                @Override
+                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                    //noinspection ConstantConditions - To prevent NullPointer on .getUid()
+                                    if (dataSnapshot.getKey().equals(firebaseAuth.getCurrentUser().getUid()))
+                                        userSignInObject = dataSnapshot.getValue(User.class);
+                                }
+
+                                @Override
+                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                }
+
+                                @Override
+                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    Log.e("SignInFragmentTAG", "Error, could not retrieve data");
+                                }
+                            });
+
+                            /**
+                             * Wait slightly ~ 20 secs before returning user to previous screen
+                             */
+
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressDialog.dismiss();
+                                    Intent intent = new Intent(getActivity(), UserLayoutActivity.class);
+                                    intent.putExtra("userBundleKey", userSignInObject);
+                                    startActivity(intent);
+                                }
+                            }, 2048);
+
+//                            startActivity(new Intent(getActivity().getApplication(),
+//                                    UserLayoutActivity.class));
                         } else {
                             numberOfFailedLogins++;
-
                             if (numberOfFailedLogins % 4 == 0) {
                                 Snackbar.make(getActivity().findViewById(R.id.user_login_container),
                                         "If you forgot your password, Click on Forgot Password...",

@@ -38,19 +38,25 @@ public class MessagesFragment extends Fragment implements View.OnClickListener {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
+        setUpViewObjects(view);
+        sendMessage.setOnClickListener(this);
 
-        Typeface robotoBold = Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Bold.ttf");
+        return view;
+    }
 
+    private void setUpViewObjects(View view) {
         messages_text_view = (TextView) view.findViewById(R.id.messages_text_view);
-        messages_text_view.setTypeface(robotoBold);
+        messages_text_view.setTypeface(useRobotoBoldFontStyle());
         messageInputEntry = (EditText) view.findViewById(R.id.message_input_area);
 
         capturedMessage = messageInputEntry.getText().toString();
 
         sendMessage = (ImageButton) view.findViewById(R.id.send_button);
-        sendMessage.setOnClickListener(this);
+    }
 
-        return view;
+    private Typeface useRobotoBoldFontStyle() {
+        return Typeface.createFromAsset(getActivity().getAssets(),
+                "font/Roboto-Bold.ttf");
     }
 
     @Override

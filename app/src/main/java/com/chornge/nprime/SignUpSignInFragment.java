@@ -36,28 +36,38 @@ public class SignUpSignInFragment extends Fragment implements View.OnClickListen
         View view = inflater.inflate(R.layout.fragment_sign_up_sign_in, container, false);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        Typeface robotoLight = Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Light.ttf");
-        Typeface robotoLightItalic = Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-LightItalic.ttf");
-        //Typeface robotoBold = Typeface.createFromAsset(this.getAssets(), "font/Roboto-Bold.ttf");
 
-        RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.sign_up_sign_in_container);
-        final Animation translateAnimation = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.translate_welcome_screen);
-        relativeLayout.startAnimation(translateAnimation);
-
-        bSignUp = (Button) view.findViewById(R.id.bSignUp);
-        bSignUp.setTypeface(robotoLight);
-        bSignIn = (Button) view.findViewById(R.id.bSignIn);
-        bSignIn.setTypeface(robotoLight);
-
-        app_name_text_view_prime = (TextView) view.findViewById(R.id.text_view_prime);
-        app_name_text_view_prime.setTypeface(robotoLightItalic);
-        app_name_text_view_prime.setTextColor(0xFFE9AD07);
+        setUpViewObjects(view);
 
         bSignUp.setOnClickListener(this);
         bSignIn.setOnClickListener(this);
 
         return view;
     }
+
+    private void setUpViewObjects(View view) {
+        RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.sign_up_sign_in_container);
+        final Animation translateAnimation = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.translate_welcome_screen);
+        relativeLayout.startAnimation(translateAnimation);
+
+        bSignUp = (Button) view.findViewById(R.id.bSignUp);
+        bSignUp.setTypeface(useRobotoLightFontStyle());
+        bSignIn = (Button) view.findViewById(R.id.bSignIn);
+        bSignIn.setTypeface(useRobotoLightFontStyle());
+
+        app_name_text_view_prime = (TextView) view.findViewById(R.id.text_view_prime);
+        app_name_text_view_prime.setTypeface(useRobotoLightItalicFontStyle());
+        app_name_text_view_prime.setTextColor(0xFFE9AD07);
+    }
+
+    private Typeface useRobotoLightFontStyle() {
+        return Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Light.ttf");
+    }
+
+    private Typeface useRobotoLightItalicFontStyle() {
+        return Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-LightItalic.ttf");
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

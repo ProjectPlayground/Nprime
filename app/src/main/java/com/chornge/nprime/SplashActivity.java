@@ -16,14 +16,23 @@ public class SplashActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        pickScreenOrientation();
+        setScreenDuration();
+    }
+
+    private void pickScreenOrientation() {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
         }
+    }
+
+    private void setScreenDuration() {
         int SPLASH_DISPLAY_LENGTH = 2048; //~ 2 seconds
 
         new Handler().postDelayed(new Runnable() {

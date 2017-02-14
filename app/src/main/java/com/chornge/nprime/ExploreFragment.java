@@ -37,16 +37,9 @@ public class ExploreFragment extends Fragment {
 
         ReadRss readRss = new ReadRss(getContext());
         readRss.execute();
-
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
 
-        Typeface robotoBold = Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Bold.ttf");
-        explore_text_view = (TextView) view.findViewById(R.id.explore_text_view);
-        searchView = (SearchView) view.findViewById(R.id.search_view);
-        query = searchView.getQuery();
-        searchView.setQueryHint("Search Here");
-        explore_text_view.setTypeface(robotoBold);
-
+        setUpViewObjects(view);
         SearchFragment searchFragment = new SearchFragment();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -54,6 +47,19 @@ public class ExploreFragment extends Fragment {
                 .commit();
 
         return view;
+    }
+
+    private void setUpViewObjects(View view) {
+        explore_text_view = (TextView) view.findViewById(R.id.explore_text_view);
+        searchView = (SearchView) view.findViewById(R.id.search_view);
+        query = searchView.getQuery();
+        searchView.setQueryHint("Search Here");
+        explore_text_view.setTypeface(useRobotoBoldFontStyle());
+    }
+
+    private Typeface useRobotoBoldFontStyle() {
+        return Typeface.createFromAsset(getActivity().getAssets(),
+                "font/Roboto-Bold.ttf");
     }
 
     @Override

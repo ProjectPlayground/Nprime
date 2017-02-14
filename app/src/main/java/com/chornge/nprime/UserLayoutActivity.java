@@ -28,6 +28,10 @@ public class UserLayoutActivity extends AppCompatActivity {
         Bundle getUserObjectInBundle = getIntent().getExtras();
         userObject = getUserObjectInBundle.getParcelable("userBundleKey");
 
+        setUpTabs();
+    }
+
+    private void setUpTabs() {
         TabLayout mTabLayout;
         final ViewPager mViewPager;
         final PagerAdapter mPagerAdapter;

@@ -40,9 +40,6 @@ import static android.app.Activity.RESULT_OK;
 public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         View.OnClickListener, Runnable {
 
-//    public static final int RESULT_GALLERY = 0;
-//    private static final String KEY_NAME = "key_name";
-
     private static final int SELECT_PICTURE = 1;
     boolean isTabLoaded = false;
     ImageButton userProfilePhoto;
@@ -50,8 +47,6 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
     TextView location_text;
     TextView followings_text;
     TextView followers_text;
-
-    private User userObject;
 
     private DatePickerDialog datePickerDialog;
     private ImageButton calendar_event_button;
@@ -61,47 +56,17 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
 
     }
 
-//    public static UserProfileFragment newInstance(User user) {
-//        UserProfileFragment fragment = new UserProfileFragment();
-//        Bundle userBundle = new Bundle();
-//        userBundle.putParcelable("userProfileData", user);
-//        fragment.setArguments(userBundle);
-//        return fragment;
-//    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setUpMap();
+    }
 
+    private void setUpMap() {
         SupportMapFragment mapFragment = SupportMapFragment.newInstance();
         mapFragment.getMapAsync(this);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.mapContainer, mapFragment).commit();
-    }
-
-    protected void requestPermission(String permissionType, int
-            requestCode) {
-        int permission = ContextCompat.checkSelfPermission(getContext(),
-                permissionType);
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{permissionType}, requestCode
-            );
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
-                                           @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 101: {
-                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast toast = Toast.makeText(getContext(),
-                            "Unable to show Location. Permission is Required", Toast.LENGTH_LONG);
-                    toast.show();
-                }
-            }
-        }
     }
 
     @Override
@@ -110,19 +75,25 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
 
         //inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
-
         setRetainInstance(true);
-
-        ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
-                .hideSoftInputFromWindow(view.getWindowToken(), 0);
-
         firebaseAuth = FirebaseAuth.getInstance();
 
-        /**
-         * receive userObject
-         */
-        userObject = ((UserLayoutActivity) getActivity()).getUserObject();
+        minimizeKeyBoardOnStartUp(view);
+        setUpUserObject(view, ((UserLayoutActivity) getActivity()).getUserObject());
+        setUpClickListeners();
+        setUpCalendar();
+        locationPermissionRequest();
+        setUpMap();
 
+        return view;
+    }
+
+    private void minimizeKeyBoardOnStartUp(View view) {
+        ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
+                .hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    private void setUpUserObject(View view, User userObject) {
         TextView userProfileName = (TextView) view.findViewById(R.id.user_profile_name);
         if (userObject.getFullName() != null) {
             userProfileName.setText(userObject.getFullName());
@@ -140,14 +111,17 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         followings_text.setText(numberOfFollowings);
 
         location_text = (TextView) view.findViewById(R.id.location_text);
-        location_text.setOnClickListener(this);
-
         userProfilePhoto = (ImageButton) view.findViewById(R.id.user_profile_photo);
-        userProfilePhoto.setOnClickListener(this);
-
         calendar_event_button = (ImageButton) view.findViewById(R.id.calendar_event_button);
-        calendar_event_button.setOnClickListener(this);
+    }
 
+    private void setUpClickListeners() {
+        location_text.setOnClickListener(this);
+        userProfilePhoto.setOnClickListener(this);
+        calendar_event_button.setOnClickListener(this);
+    }
+
+    private void setUpCalendar() {
         Calendar calendar = Calendar.getInstance();
         datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -157,16 +131,11 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
             }
 
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+    }
 
+    private void locationPermissionRequest() {
         int LOCATION_REQUEST_CODE = 101;
         requestPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_REQUEST_CODE);
-
-        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-        mapFragment.getMapAsync(this);
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.mapContainer, mapFragment).commit();
-
-        return view;
     }
 
     @Override
@@ -176,6 +145,22 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         if (isVisibleToUser && !isTabLoaded) {
             Log.e("First Tab Fragment", "loaded");
             isTabLoaded = true;
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == calendar_event_button) {
+            datePickerDialog.show();
+        }
+
+        if (view == userProfilePhoto) {
+            showGallery();
+        }
+
+        if (view == location_text) {
+            MapDialogFragment mapDialogFragment = new MapDialogFragment();
+//            mapDialogFragment.dismiss();
         }
     }
 
@@ -219,38 +204,46 @@ public class UserProfileFragment extends Fragment implements OnMapReadyCallback,
         return res;
     }
 
+    private void showGallery() {
+        Intent intent = new Intent().setType("image/*").setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,
+                "Select Picture"), SELECT_PICTURE);
+    }
+
+    protected void requestPermission(String permissionType, int
+            requestCode) {
+        int permission = ContextCompat.checkSelfPermission(getContext(),
+                permissionType);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{permissionType}, requestCode
+            );
+        }
+    }
+
     @Override
-    public void onClick(View view) {
-        if (view == calendar_event_button) {
-            datePickerDialog.show();
-        }
-
-        if (view == userProfilePhoto) {
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent,
-                    "Select Picture"), SELECT_PICTURE);
-        }
-
-        if (view == location_text) {
-            MapDialogFragment mapDialogFragment = new MapDialogFragment();
-
-//            //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//            FragmentManager fragmentManager = getChildFragmentManager();
-//            mapDialogFragment.show(fragmentManager, mapDialogFragment.getTag());
-//
-//            SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-//            mapFragment.getMapAsync(this);
-//
-//            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-//            //fragmentTransaction.replace(R.id.map_dialog_fragment_container, mapFragment).commit();
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 101: {
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Toast toast = Toast.makeText(getContext(),
+                            "Unable to show Location. Permission is Required", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            }
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        setUpMap();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 
     @Override

@@ -36,6 +36,7 @@ public class EventsFragment extends Fragment implements View.OnClickListener,
     ImageButton cameraButton;
     ViewSwitcher viewSwitcher;
     TextView events_text_view;
+    Typeface robotoBold;
 
     //mandatory
     public EventsFragment() {
@@ -56,11 +57,17 @@ public class EventsFragment extends Fragment implements View.OnClickListener,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_events, container, false);
-
         setRetainInstance(true);
+        setUpViewObjects(view);
 
-        Typeface robotoBold = Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Bold.ttf");
+        plus.setOnClickListener(this);
+        cameraButton.setOnClickListener(this);
 
+        return view;
+    }
+
+    private void setUpViewObjects(View view) {
+        robotoBold = Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Bold.ttf");
         events_text_view = (TextView) view.findViewById(R.id.events_text_view);
         events_text_view.setTypeface(robotoBold);
 
@@ -69,11 +76,6 @@ public class EventsFragment extends Fragment implements View.OnClickListener,
         cameraButton = (ImageButton) view.findViewById(R.id.pictureButton);
 
         viewSwitcher = (ViewSwitcher) view.findViewById(R.id.top_layer_layout);
-
-        plus.setOnClickListener(this);
-        cameraButton.setOnClickListener(this);
-
-        return view;
     }
 
     @Override
